@@ -1,18 +1,20 @@
 package dnd.business.units;
 
-public class Rogue extends Player {
-    private int cost;
-    private int currentEnergy;
+public class Hunter extends Player{
+    private int range;
+    private int arrowCount;
+    private int ticksCount;
 
-    public Rogue(String name, int healthPool, int healthAmount, int attackPoint, int defencePoint, int experience, int playerLevel, int cost) {
+    public Hunter(String name, int healthPool, int healthAmount, int attackPoint, int defencePoint, int experience, int playerLevel, int range, int arrowCount) {
         super(name, healthPool, healthAmount, attackPoint, defencePoint, experience, playerLevel);
-        this.cost = cost;
-        this.currentEnergy = 100;
+        this.range = range;
+        this.arrowCount = arrowCount;
+        this.ticksCount = 0;
     }
 
     public String description() {
         return this.name +"     Health: " + this.healthAmount + "/" + this.healthPool + "     Attack: " + this.attackPoint +
                 "     Defence: " + this.defencePoint + "     Level: " + this.playerLevel + "     Experience: " + this.experience
-                + "    Energy: " + this.currentEnergy;
+                + "    : " +;
     }
 }

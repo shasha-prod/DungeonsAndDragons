@@ -1,4 +1,5 @@
 package dnd.business.units;
 
-public class Trap {
+public class Trap extends Enemy {
+
 }

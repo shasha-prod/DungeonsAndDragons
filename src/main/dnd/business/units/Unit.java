@@ -3,11 +3,11 @@ package dnd.business.units;
 import dnd.business.visitors.CellVisitor;
 
 public abstract class Unit implements Occupant, CellVisitor {
-    private String name;
-    private int healthPool;
-    private int healthAmount;
-    private int attackPoint;
-    private int defencePoint;
+    protected String name;
+    protected int healthPool;
+    protected int healthAmount;
+    protected int attackPoint;
+    protected int defencePoint;
 
     public Unit(String name, int healthPool, int healthAmount, int attackPoint, int defencePoint) {
         this.name = name;
@@ -26,9 +26,5 @@ public abstract class Unit implements Occupant, CellVisitor {
     public String getName() {
         return name;
     }
-    public String description() {
-        return null;
-    }
-
 
 }
