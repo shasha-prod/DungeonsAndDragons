@@ -1,4 +1,5 @@
 package dnd.business;
 
-public class GameObserver {
+public interface GameObserver {
+    void onMessage(String message);
 }

@@ -1,4 +1,14 @@
 package dnd.cli;
 
-public class CLIHandler {
+import dnd.business.GameObserver;
+
+import java.util.Scanner;
+
+public class CLIHandler implements GameObserver {
+    private Scanner scanner = new Scanner(System.in);
+
+    @Override
+    public void onMessage(String message) {
+        System.out.println(message);
+    }
 }
