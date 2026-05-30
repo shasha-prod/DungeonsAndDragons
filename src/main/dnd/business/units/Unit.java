@@ -1,6 +1,7 @@
 package dnd.business.units;
 
 import dnd.business.visitors.CellVisitor;
+import dnd.business.visitors.OccupantVisitor;
 
 public abstract class Unit implements Occupant, CellVisitor {
     protected String name;

@@ -15,6 +15,6 @@ public class Hunter extends Player{
     public String description() {
         return this.name +"     Health: " + this.healthAmount + "/" + this.healthPool + "     Attack: " + this.attackPoint +
                 "     Defence: " + this.defencePoint + "     Level: " + this.playerLevel + "     Experience: " + this.experience
-                + "    : " +;
+                + "    Arrows: " + this.arrowCount + "    Range: " + this.range ;
     }
 }

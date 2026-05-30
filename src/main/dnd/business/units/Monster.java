@@ -7,5 +7,7 @@ public class Monster extends Enemy{
         super(name, healthPool, healthAmount, attackPoint, defencePoint);
         this.visionRange = visionRange;
     }
+    public void onEnemyTurn(){
 
+    }
 }
