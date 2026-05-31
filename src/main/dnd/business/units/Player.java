@@ -17,7 +17,7 @@ public abstract class Player extends Unit implements HeroicUnit {
         super(name,healthPool,healthAmount,attackPoint,defencePoint);
     }
 
-    public void levelUp() {
+    public boolean levelUp() {
         if(experience > 50*playerLevel) {
             experience = 0;
             playerLevel =  playerLevel + 1;
@@ -25,7 +25,9 @@ public abstract class Player extends Unit implements HeroicUnit {
             healthAmount = healthPool;
             attackPoint = attackPoint + (4*playerLevel);
             defencePoint = defencePoint + (playerLevel);
+            return true;
         }
+        return false;
     }
 
         @Override

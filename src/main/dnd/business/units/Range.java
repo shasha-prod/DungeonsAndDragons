@@ -3,7 +3,12 @@ package dnd.business.units;
 import dnd.business.board.Position;
 
 public class Range {
-    public static class range(Position a, Position b){
-        return Math.sqrt((a.getX() - b.getX())*(a.getX() - b.getX()) + (a.getY()-b.getY())*(a.getY()-b.getY()));
+    public static int range(Position player, Position enemy){
+        return Math.sqrt((player.getX() - enemy.getX())*(player.getX() - enemy.getX()) +
+                (player.getY()-enemy.getY())*(player.getY()-enemy.getY()));
+    }
+
+    public static Unit[] unitsInRange(Unit unit, int range){
+
     }
 }
