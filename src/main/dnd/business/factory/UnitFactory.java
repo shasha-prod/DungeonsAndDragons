@@ -10,7 +10,6 @@ import java.util.Hashtable;
 public class UnitFactory {
     private Player[] players;
     private Dictionary<Character,Enemy> enemyDictionary;
-    private CLIHandler clientHandler;
 
     public UnitFactory() {
         this.players = new Player[7];
@@ -53,7 +52,7 @@ public class UnitFactory {
             Enemy e =  enemyDictionary.get(tile);
             e.setPosition(pos);
         }
-        clientHandler.onMessage("Illegal char entered!");
+        throw new IllegalStateException("Illegal char entered!");
     }
 
 }

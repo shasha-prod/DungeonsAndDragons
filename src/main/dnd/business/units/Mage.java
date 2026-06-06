@@ -58,6 +58,9 @@ public class Mage extends Player{
             hits = hits + 1;
         }
     }
+    public void OnGameTick(){
+        currentMana = Math.min(manaPool, currentMana+1*playerLevel);
+    }
     public String description() {
         return this.name +"     Health: " + this.healthAmount + "/" + this.healthPool + "     Attack: " + this.attackPoint +
                 "     Defence: " + this.defencePoint + "     Level: " + this.playerLevel + "     Experience: " + this.experience +

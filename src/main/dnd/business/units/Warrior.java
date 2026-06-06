@@ -47,7 +47,11 @@ public class Warrior extends Player {
 
         addMessage(this.name + " used Avenger's Shield, healing for " + (10*defencePoint));
     }
-
+    public void onGameTick(){
+        if(remainingCooldown > 0){
+            remainingCooldown--;
+        }
+    }
     public String description() {
         return this.name +"     Health: " + this.healthAmount + "/" + this.healthPool + "     Attack: " + this.attackPoint +
                 "     Defence: " + this.defencePoint + "     Level: " + this.playerLevel +

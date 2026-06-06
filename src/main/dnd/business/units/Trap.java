@@ -13,7 +13,14 @@ public class Trap extends Enemy {
         this.visibilityTime = visibilityTime;
         this.visible = true;
     }
-
+    public void OnGameTick(){
+        if(ticksCount < this.visibilityTime){
+            this.visible = true;
+        }
+        else this.visible = false;
+        ticksCount++;
+        if(this.ticksCount > this.invisibilityTime+this.visibilityTime){this.ticksCount = 0;}
+    }
     public void onEnemyTurn(){
 
     }
