@@ -33,28 +33,10 @@ public class GameManager {
 
     // The Main Entry Point
     public void run(String levelDirPath) {
-        // 1. Get files (Assuming helper method to read directory)
-        levelFiles = getLevelFilesFromDir(levelDirPath);
 
-        // 2. Start UI and get player
-        cli.onStart();
-        String choice = cli.getPlayerAction();
-        player = factory.createPlayer(Integer.parseInt(choice));
+    }
 
-        // Hook the player up to the observers so it can report combat/level ups
-        for(GameObserver o : observers) player.addObserver(o);
-
-        // 3. Play through the files
-        for (int i = 0; i < levelFiles.length; i++) {
-            boolean playerSurvived = playLevel(levelFiles[i]);
-            if (!playerSurvived) {
-                break; // Game Over
-            }
-        }
-
-        if (!player.isDead()) {
-            cli.onMessage("You win!");
-        }
+    private File[] getLevelFilesFromDir(String levelDirPath) {
     }
 
     // The Loop
