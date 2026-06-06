@@ -12,6 +12,14 @@ public abstract class Unit implements Occupant, CellVisitor {
     protected int defencePoint;
     protected Position position;
 
+    public Unit(String name, int healthPool, int healthAmount, int attackPoint, int defencePoint) {
+        this.name = name;
+        this.healthPool = healthPool;
+        this.healthAmount = healthAmount;
+        this.attackPoint = attackPoint;
+        this.defencePoint = defencePoint;
+        this.position = null;
+    }
     public Unit(String name, int healthPool, int healthAmount, int attackPoint, int defencePoint, Position position) {
         this.name = name;
         this.healthPool = healthPool;
@@ -20,11 +28,13 @@ public abstract class Unit implements Occupant, CellVisitor {
         this.defencePoint = defencePoint;
         this.position = position;
     }
+
+
     public Position getPosition() {
         return position;
     }
 
-    void setPosition(Position p) {
+    public void setPosition(Position p) {
         this.position = p;
     }
     public void accept(OccupantVisitor occupantVisitor) {

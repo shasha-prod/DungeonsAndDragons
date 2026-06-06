@@ -8,9 +8,9 @@ public class Enemy extends Unit, OccupantVisitor {
     protected int experienceValue;
     protected Player play;
 
-    public Enemy(String name, int healthPool, int healthAmount, int attackPoint, int defencePoint) {
+    public Enemy(String name, int healthPool, int healthAmount, int attackPoint, int defencePoint, int experience) {
         super(name, healthPool, healthAmount, attackPoint, defencePoint);
-        this.experienceValue = experienceValue;
+        this.experienceValue = experience;
     }
 
     @Override

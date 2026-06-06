@@ -5,8 +5,8 @@ import dnd.business.board.GameBoard;
 public class Monster extends Enemy{
     private int visionRange;
 
-    public Monster(String name, int healthPool, int healthAmount, int attackPoint, int defencePoint, int visionRange) {
-        super(name, healthPool, healthAmount, attackPoint, defencePoint);
+    public Monster(String name, int healthPool, int healthAmount, int attackPoint, int defencePoint, int visionRange, int experience) {
+        super(name, healthPool, healthAmount, attackPoint, defencePoint,experience);
         this.visionRange = visionRange;
     }
     public void onEnemyTurn(){

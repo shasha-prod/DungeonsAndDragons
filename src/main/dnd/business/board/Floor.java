@@ -7,6 +7,10 @@ import dnd.business.visitors.CellVisitor;
 public class Floor extends Cell {
     private Occupant currentOccupant;
 
+    public Floor(Position pos) {
+        super();
+    }
+
     public Occupant getCurrentOccupant() {
         return currentOccupant;
     }
@@ -28,6 +32,4 @@ public class Floor extends Cell {
         return currentOccupant.ToString();
     }
 
-    public void setOccupant(Enemy e) {
-    }
 }

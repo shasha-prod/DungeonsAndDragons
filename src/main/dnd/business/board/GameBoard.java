@@ -25,4 +25,8 @@ public class GameBoard {
         OccupantSetter setter = new OccupantSetter(o);
         cell.accept(setter);
     }
+
+    public void setCell(Position pos, Cell cell) {
+        gameBoard[pos.getY()][pos.getX()] = cell;
+    }
 }
