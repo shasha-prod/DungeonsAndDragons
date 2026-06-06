@@ -21,7 +21,7 @@ public class Floor extends Cell {
 
     @Override
     public void accept(CellVisitor visitor) {
-        visitor.visit(this);
+            visitor.visit(this);
     }
 
     @Override

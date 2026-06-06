@@ -29,17 +29,18 @@ public abstract class Player extends Unit implements HeroicUnit {
         }
         return false;
     }
-
-        @Override
-    public void visit(Wall wall) {
-
+    public void accept(Unit unit){
+        unit.visit(this);
+    }
+    @Override
+    public void visit(Player player) {
+        // Player visiting themselves doesnt do anything
     }
 
     @Override
-    public void visit(Floor floor) {
-
+    public void visit(Enemy enemy) {
+        attack(enemy);
     }
-
     @Override
     public void castAbility() {
 
