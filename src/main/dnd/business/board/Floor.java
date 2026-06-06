@@ -1,5 +1,6 @@
 package dnd.business.board;
 
+import dnd.business.units.Enemy;
 import dnd.business.units.Occupant;
 import dnd.business.visitors.CellVisitor;
 
@@ -25,5 +26,8 @@ public class Floor extends Cell {
             return ".";
         }
         return currentOccupant.ToString();
+    }
+
+    public void setOccupant(Enemy e) {
     }
 }
