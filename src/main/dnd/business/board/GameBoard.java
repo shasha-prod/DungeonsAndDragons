@@ -53,4 +53,21 @@ public class GameBoard {
 
         unit.setPosition(to);          // package-private
     }
+
+    // -----------------------------------------------------------------------
+    // Board rendering — used by CLIHandler.onBoardUpdate
+    // -----------------------------------------------------------------------
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        for (int row = 0; row < gameBoard.length; row++) {
+            for (int col = 0; col < gameBoard[row].length; col++) {
+                Cell cell = gameBoard[row][col];
+                sb.append(cell != null ? cell.toString() : " ");
+            }
+            sb.append(System.lineSeparator());
+        }
+        return sb.toString();
+    }
 }

@@ -51,7 +51,7 @@ public class GameManager {
         cli.onStart();
         String choiceStr = cli.getPlayerAction();
         int choice = Integer.parseInt(choiceStr);
-        this.player = factory.createPlayer(choice);
+        this.player = factory.createPlayer(choice - 1); // UI is 1-based; array is 0-based
 
         // Attach UI to the player so they can announce combat/level ups
         for(GameObserver o : observers) {
@@ -130,10 +130,8 @@ public class GameManager {
                 return;
         }
 
-        // Trigger the Visitor Pattern for movement/combat [cite: 278-283]
-        Cell targetCell = board.getCell(targetPos);
-        if (targetCell != null) {
-            targetCell.accept(player);
-        }
+        // Trigger the Visitor Pattern for movement/combat via movePosition,
+        // which sets player.board and player.targetPosition before dispatching.
+        player.movePosition(board, targetPos);
     }
 }
