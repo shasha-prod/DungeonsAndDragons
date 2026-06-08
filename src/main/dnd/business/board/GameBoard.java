@@ -44,8 +44,13 @@ public class GameBoard {
         gameBoard[pos.getY()][pos.getX()] = cell;
     }
 
-    public void moveUnit(Unit unit, Position position, Position targetPosition) {
-        this.setCell(position, new Floor(position));
-        this.setOccupant(targetPosition, unit);
+    public void moveUnit(Unit unit, Position from, Position to) {
+        Floor oldFloor = (Floor) getCell(from);
+        oldFloor.setCurrentOccupant(null);    // package-private
+
+        Floor newFloor = (Floor) getCell(to);
+        newFloor.setCurrentOccupant(unit);    // package-private
+
+        unit.setPosition(to);          // package-private
     }
 }
