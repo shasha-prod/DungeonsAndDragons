@@ -48,11 +48,12 @@ public class UnitFactory {
     }
 
     public Enemy createEnemy(char tile, Position pos) {
-        if(enemyDictionary.get(tile) != null) {
-            Enemy e =  enemyDictionary.get(tile);
+        Enemy e = enemyDictionary.get(tile);
+        if (e != null) {
             e.setPosition(pos);
+            return e;            // ← was missing; fell through to throw every time
         }
-        throw new IllegalStateException("Illegal char entered!");
+        throw new IllegalStateException("Unknown enemy tile: '" + tile + "'");
     }
 
 }
