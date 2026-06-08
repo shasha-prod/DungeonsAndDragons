@@ -24,4 +24,6 @@ public class Enemy extends Unit {
     public void accept(Unit unit){
         unit.visit(this);
     }
+
+    public abstract void onEnemyTurn(Player player, dnd.business.board.GameBoard board);
 }

@@ -10,6 +10,8 @@ import dnd.business.units.Enemy;
 import dnd.business.units.Player;
 import dnd.cli.CLIHandler;
 import dnd.business.board.Position;
+import dnd.business.units.Unit;
+import dnd.business.board.Cell;
 
 public class GameManager {
     private List<GameObserver> observers;

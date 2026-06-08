@@ -17,6 +17,7 @@ public abstract class Unit implements Occupant, CellVisitor, OccupantVisitor {
     protected Position targetPosition = null;
     protected GameBoard board;
     private List<String> messages = new ArrayList<>();
+    protected java.util.List<dnd.business.GameObserver> observers = new java.util.ArrayList<>();
 
 
 
@@ -40,6 +41,8 @@ public abstract class Unit implements Occupant, CellVisitor, OccupantVisitor {
     protected void addMessage(String msg) {
         messages.add(msg);
     }
+
+    public abstract String description();
 
     public List<String> drainMessages() {
         List<String> copy = new ArrayList<>(messages);
@@ -79,6 +82,14 @@ public abstract class Unit implements Occupant, CellVisitor, OccupantVisitor {
     }
     public String getName() {
         return name;
+    }
+
+    public void addObserver(dnd.business.GameObserver observer) {
+        this.observers.add(observer);
+    }
+
+    public boolean isDead() {
+        return this.healthAmount <= 0; // Assuming your health variable is named healthAmount
     }
 
 }

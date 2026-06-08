@@ -39,10 +39,18 @@ public abstract class Player extends Unit implements HeroicUnit {
 
     @Override
     public void visit(Enemy enemy) {
-        attack(enemy);
+        //
     }
     @Override
-    public void castAbility() {
+    public void castAbility(java.util.List<Enemy> enemies) {
+        //
+    }
 
+    public int getPlayerLevel() {
+        return this.playerLevel; // Assuming your level variable is named playerLevel
+    }
+
+    public void onGameTick() {
+        // Leave empty here. Subclasses like Warrior will override it.
     }
 }
