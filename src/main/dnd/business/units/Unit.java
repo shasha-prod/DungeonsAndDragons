@@ -1,11 +1,13 @@
 package dnd.business.units;
 
+import dnd.business.GameObserver;
 import dnd.business.board.*;
 import dnd.business.visitors.CellVisitor;
 import dnd.business.visitors.OccupantVisitor;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public abstract class Unit implements Occupant, CellVisitor, OccupantVisitor {
     protected String name;
@@ -16,10 +18,9 @@ public abstract class Unit implements Occupant, CellVisitor, OccupantVisitor {
     protected Position position;
     protected Position targetPosition = null;
     protected GameBoard board;
+    protected List<GameObserver> observers = new ArrayList<>();
     private List<String> messages = new ArrayList<>();
-    protected java.util.List<dnd.business.GameObserver> observers = new java.util.ArrayList<>();
-
-
+    private static final Random RANDOM = new Random();
 
     public Unit(String name, int healthPool, int healthAmount, int attackPoint, int defencePoint, Position position) {
         this.name = name;
@@ -31,65 +32,126 @@ public abstract class Unit implements Occupant, CellVisitor, OccupantVisitor {
     }
 
     public Unit(String name, int healthPool, int healthAmount, int attackPoint, int defencePoint) {
-        this.name = name;
-        this.healthPool = healthPool;
-        this.healthAmount = healthAmount;
-        this.attackPoint = attackPoint;
-        this.defencePoint = defencePoint;
-        this.position = null;
+        this(name, healthPool, healthAmount, attackPoint, defencePoint, null);
     }
-    protected void addMessage(String msg) {
-        messages.add(msg);
-    }
+
+    // -----------------------------------------------------------------------
+    // Abstract contract
+    // -----------------------------------------------------------------------
 
     public abstract String description();
 
-    public List<String> drainMessages() {
-        List<String> copy = new ArrayList<>(messages);
-        messages.clear();
-        return copy;
+    // -----------------------------------------------------------------------
+    // CellVisitor — Level 1 of double dispatch
+    // -----------------------------------------------------------------------
+
+    @Override
+    public void visit(Wall wall) {
+        // Hit a wall — movement is silently blocked; nothing changes.
     }
+
+    /**
+     * Reached a Floor tile.
+     * • Empty floor  → move onto it.
+     * • Occupied floor → trigger OccupantVisitor dispatch (combat / interaction).
+     */
+    @Override
+    public void visit(Floor floor) {
+        if (floor.getCurrentOccupant() == null) {
+            // Clear the old cell and move
+            board.setCell(position, new Floor(position));
+            floor.setCurrentOccupant(this);
+            position = targetPosition;
+        } else {
+            // Level 2 dispatch: let the occupant decide what happens
+            floor.getCurrentOccupant().accept(this);
+        }
+    }
+
+    // -----------------------------------------------------------------------
+    // OccupantVisitor — Level 2 of double dispatch (subclasses specialise)
+    // -----------------------------------------------------------------------
+
     @Override
     public abstract void visit(Player player);
 
     @Override
     public abstract void visit(Enemy enemy);
 
-    public Position getPosition() {
-        return position;
+    // -----------------------------------------------------------------------
+    // Occupant interface
+    // -----------------------------------------------------------------------
+
+    @Override
+    public void accept(OccupantVisitor visitor) {
+        // Concrete subclasses (Player / Enemy) provide the specific dispatch.
+        // This base method is intentionally left empty; see Enemy and Player.
     }
 
-    public void setPosition(Position p) {
-        this.position = p;
-    }
-    public void movePosition(GameBoard gameBoard, Position newPosition){
+    // -----------------------------------------------------------------------
+    // Movement
+    // -----------------------------------------------------------------------
+
+    /**
+     * Attempt to move to newPosition on the given board.
+     * The board reference is stored so that visit(Floor) can update cells
+     * after a successful move.
+     */
+    public void movePosition(GameBoard gameBoard, Position newPosition) {
+        this.board = gameBoard;          // <-- fixes the null-board NPE
         this.targetPosition = newPosition;
         Cell targetCell = gameBoard.getCell(targetPosition);
         targetCell.accept(this);
     }
-    public void visit(Wall wall){
-        // player/enemy has hit a wall, the unit doesnt move
-    }
-    public void visit(Floor floor){
-        if(floor.getCurrentOccupant() == null) {
-            floor.setCurrentOccupant(this);
-            board.moveUnit(this, this.position, this.targetPosition);
+
+    // -----------------------------------------------------------------------
+    // Combat
+    // -----------------------------------------------------------------------
+
+    /**
+     * Roll-based attack: damage = max(0, attackRoll - defenseRoll).
+     * Notifies all observers and announces death if the target dies.
+     */
+    protected void attack(Unit target) {
+        int attackRoll  = RANDOM.nextInt(attackPoint) + 1;
+        int defenseRoll = RANDOM.nextInt(Math.max(target.defencePoint, 1)) + 1;
+        int damage      = Math.max(0, attackRoll - defenseRoll);
+        target.healthAmount -= damage;
+
+        for (GameObserver o : observers) {
+            o.onCombat(this, target, attackRoll, defenseRoll, damage);
         }
-        else{
-            floor.getCurrentOccupant().accept(this);
+        if (target.isDead()) {
+            for (GameObserver o : observers) {
+                o.onDeath(target);
+            }
         }
-
-    }
-    public String getName() {
-        return name;
     }
 
-    public void addObserver(dnd.business.GameObserver observer) {
-        this.observers.add(observer);
+    // -----------------------------------------------------------------------
+    // Observers / messaging
+    // -----------------------------------------------------------------------
+
+    public void addObserver(GameObserver observer) {
+        observers.add(observer);
     }
 
-    public boolean isDead() {
-        return this.healthAmount <= 0; // Assuming your health variable is named healthAmount
+    protected void addMessage(String msg) {
+        messages.add(msg);
     }
 
+    public List<String> drainMessages() {
+        List<String> copy = new ArrayList<>(messages);
+        messages.clear();
+        return copy;
+    }
+
+    // -----------------------------------------------------------------------
+    // Accessors
+    // -----------------------------------------------------------------------
+
+    public String getName()       { return name; }
+    public Position getPosition() { return position; }
+    public void setPosition(Position p) { this.position = p; }
+    public boolean isDead()       { return healthAmount <= 0; }
 }
