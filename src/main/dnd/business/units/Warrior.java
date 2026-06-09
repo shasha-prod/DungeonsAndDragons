@@ -2,6 +2,8 @@ package dnd.business.units;
 
 import dnd.cli.CLIHandler;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class Warrior extends Player {
@@ -34,7 +36,7 @@ public class Warrior extends Player {
     }
 
     @Override
-    public void castAbility() {
+    public void castAbility(List<Enemy> enemies) {
         if(remainingCooldown > 0){
             addMessage(this.name + " tried to cast Avenger's Shield, but there is a cooldown: " + remainingCooldown);
         }
@@ -42,11 +44,13 @@ public class Warrior extends Player {
             this.remainingCooldown = this.abilityCooldown;
             this.healthAmount = Math.min(this.healthAmount + (10*defencePoint),healthPool);
         }
-        // if(Range.range(this.pos, ))
-        this.healthAmount =(this.healthAmount* 9)/10;
-
+        List<Enemy> closeEnemies = getEnemiesInRange(enemies, 3);
+        Enemy chosen = chooseRandomEnemy(closeEnemies);
+        chosen.takeDamage(this.healthAmount/10);
         addMessage(this.name + " used Avenger's Shield, healing for " + (10*defencePoint));
     }
+
+
     public void onGameTick(){
         if(remainingCooldown > 0){
             remainingCooldown--;

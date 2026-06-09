@@ -1,5 +1,7 @@
 package dnd.business.units;
 
+import java.util.List;
+
 public class Rogue extends Player {
     private int cost;
     private int currentEnergy;
@@ -27,13 +29,15 @@ public class Rogue extends Player {
     }
 
     @Override
-    public void castAbility() {
+    public void castAbility(List<Enemy> enemies) {
         if(currentEnergy < cost){
             addMessage("Cannot cast ability, it costs "+cost+" to use special ability, and we only have  " + currentEnergy );
         }
         currentEnergy -= cost;
-        // for enemy in range <2 reduse health: health -attack points
-
+        List<Enemy> closeEnemies = getEnemiesInRange(enemies,2);
+        for (Enemy enemy :closeEnemies){
+            enemy.takeDamage(attackPoint);
+        }
     }
     public String description() {
         return this.name +"     Health: " + this.healthAmount + "/" + this.healthPool + "     Attack: " + this.attackPoint +

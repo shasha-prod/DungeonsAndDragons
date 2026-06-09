@@ -134,4 +134,5 @@ public class GameManager {
         // which sets player.board and player.targetPosition before dispatching.
         player.movePosition(board, targetPos);
     }
+
 }

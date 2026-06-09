@@ -116,18 +116,23 @@ public abstract class Unit implements Occupant, CellVisitor, OccupantVisitor {
         int attackRoll  = RANDOM.nextInt(attackPoint) + 1;
         int defenseRoll = RANDOM.nextInt(Math.max(target.defencePoint, 1)) + 1;
         int damage      = Math.max(0, attackRoll - defenseRoll);
-        target.healthAmount -= damage;
-
-        for (GameObserver o : observers) {
-            o.onCombat(this, target, attackRoll, defenseRoll, damage);
-        }
-        if (target.isDead()) {
-            for (GameObserver o : observers) {
-                o.onDeath(target);
-            }
-        }
+        target.takeDamage(damage);
+        return String.format(
+                "%s attacked %s. Roll: %d - %d = %d damage.",
+                name, defender.name, attackRoll, defenseRoll, damage
+        );
+//        for (GameObserver o : observers) {
+//            o.onCombat(this, target, attackRoll, defenseRoll, damage);
+//        }
+//        if (target.isDead()) {
+//            for (GameObserver o : observers) {
+//                o.onDeath(target);
+//            }
+//        }
     }
-
+    public void takeDamage(int amount) {
+        healthAmount = Math.max(0, healthAmount - amount);
+    }
     // -----------------------------------------------------------------------
     // Observers / messaging
     // -----------------------------------------------------------------------
@@ -154,4 +159,6 @@ public abstract class Unit implements Occupant, CellVisitor, OccupantVisitor {
     public Position getPosition() { return position; }
     public void setPosition(Position p) { this.position = p; }
     public boolean isDead()       { return healthAmount <= 0; }
+    public boolean isAlive()       { return healthAmount > 0; }
+
 }

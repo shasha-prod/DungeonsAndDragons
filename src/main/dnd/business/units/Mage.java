@@ -2,6 +2,8 @@ package dnd.business.units;
 
 import dnd.cli.CLIHandler;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class Mage extends Player{
@@ -44,18 +46,18 @@ public class Mage extends Player{
     }
 
     @Override
-    public void castAbility(){
+    public void castAbility(List<Enemy> enemyList){
         if(currentMana < manaCost){
             addMessage("Cannot cast ability, it costs "+manaCost+" to Mana, and we only have  " + currentMana );
         }
         addMessage(this.name + " casts Blizzard");
         currentMana = currentMana - manaCost;
         int hits = 0;
-        while(hits < hitsCount && Range.range(enemy,player)< abilityRange){
-            int hitRange = random.nextInt(0,3);
-            //randomly hits one enemy in hitRange
-            //makes enemys health go down: health - spell power
-            hits = hits + 1;
+        List closeEnemies = getEnemiesInRange(enemyList,abilityRange);
+        while(hits< hitsCount){
+            chooseRandomEnemy(closeEnemies).takeDamage(spellPower);
+            hits++;
+
         }
     }
     public void OnGameTick(){

@@ -8,7 +8,4 @@ public class Range {
                 (player.getY()-enemy.getY())*(player.getY()-enemy.getY()));
     }
 
-    public static Unit[] unitsInRange(Unit unit, int range){
-
-    }
 }
