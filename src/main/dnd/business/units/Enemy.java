@@ -1,16 +1,21 @@
 package dnd.business.units;
 
-import dnd.business.board.Floor;
-import dnd.business.board.Wall;
+import dnd.business.board.GameBoard;
 import dnd.business.visitors.OccupantVisitor;
 
-public class Enemy extends Unit {
+public abstract class Enemy extends Unit {
+
     protected int experienceValue;
 
-    public Enemy(String name, int healthPool, int healthAmount, int attackPoint, int defencePoint, int experience) {
-        super(name,healthPool,healthAmount,attackPoint,defencePoint);
-        this.experienceValue = experience;
+    public Enemy(String name, int healthPool, int healthAmount,
+                 int attackPoint, int defencePoint, int experienceValue) {
+        super(name, healthPool, healthAmount, attackPoint, defencePoint);
+        this.experienceValue = experienceValue;
     }
+
+    // -----------------------------------------------------------------------
+    // OccupantVisitor — enemy attacks a player; enemy-on-enemy is a no-op
+    // -----------------------------------------------------------------------
 
     @Override
     public void visit(Player player) {
@@ -19,11 +24,27 @@ public class Enemy extends Unit {
 
     @Override
     public void visit(Enemy enemy) {
-        //enemy visiting enemy doesnt do anything
-    }
-    public void accept(Unit unit){
-        unit.visit(this);
+        // Two enemies occupying the same tile — ignored.
     }
 
-    public abstract void onEnemyTurn(Player player, dnd.business.board.GameBoard board);
+    // -----------------------------------------------------------------------
+    // Occupant — Level 2 double-dispatch back into the OccupantVisitor
+    // -----------------------------------------------------------------------
+
+    @Override
+    public void accept(OccupantVisitor visitor) {
+        visitor.visit(this);
+    }
+
+    // -----------------------------------------------------------------------
+    // Enemy AI — subclasses define their own behaviour
+    // -----------------------------------------------------------------------
+
+    /**
+     * Called once per game tick for this enemy's turn.
+     *
+     * @param player the current player (used for targeting / combat)
+     * @param board  the live game board (used for movement)
+     */
+    public abstract void onEnemyTurn(Player player, GameBoard board);
 }

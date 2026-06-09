@@ -1,53 +1,87 @@
 package dnd.business.units;
 
-import dnd.business.board.Cell;
 import dnd.business.board.GameBoard;
 import dnd.business.board.Position;
 
 import java.util.Random;
 
-public class Monster extends Enemy{
-    private int visionRange;
+/**
+ * A standard roaming enemy.
+ * • Within visionRange of the player → moves one step closer (and attacks when adjacent).
+ * • Outside visionRange              → moves randomly or stays put.
+ */
+public class Monster extends Enemy {
 
-    public Monster(String name, int healthPool, int healthAmount, int attackPoint, int defencePoint, int visionRange, int experience) {
-        super(name, healthPool, healthAmount, attackPoint, defencePoint,experience);
+    private int visionRange;
+    private static final Random RANDOM = new Random();
+
+    public Monster(String name, int healthPool, int healthAmount,
+                   int attackPoint, int defencePoint,
+                   int visionRange, int experienceValue) {
+        super(name, healthPool, healthAmount, attackPoint, defencePoint, experienceValue);
         this.visionRange = visionRange;
     }
-    public void onEnemyTurn(GameBoard gameBoard, Player play) {
-        if(Range.range(play.getPosition(), this.position) < visionRange){
-            int dx = this.position.getX() -play.getPosition().getX();
-            int dy = this.position.getY() -play.getPosition().getY();
-            if(Math.abs(dx) > Math.abs(dy)){
-                if(dx > 0){
-                    movePosition(gameBoard,new Position(this.position.getX()-1,this.position.getY()));
-                }
-                else {
-                    movePosition(gameBoard,new Position(this.position.getX()+1,this.position.getY()));
-                }
-            }
-            else{
-                if(dy > 0) {
-                    movePosition(gameBoard, new Position(this.position.getX(), this.position.getY() - 1));
-                }
-                else{
-                    movePosition(gameBoard,new Position(this.position.getX(),this.position.getY()+1));
-                }
-            }
+
+    // -----------------------------------------------------------------------
+    // Enemy AI turn  (signature matches Enemy.onEnemyTurn)
+    // -----------------------------------------------------------------------
+
+    @Override
+    public void onEnemyTurn(Player player, GameBoard board) {
+        if (position == null || player.getPosition() == null) return;
+
+        int dist = Range.range(position, player.getPosition());
+
+        if (dist <= 1) {
+            // Already adjacent — attack instead of stepping
+            attack(player);
+            return;
         }
-        else{
-            Random random = null;
-            int roll = random.nextInt(5);  // 0-4
-            switch(roll) {
-                case 0: movePosition(gameBoard, new Position(
-                        position.getX() - 1, position.getY())); break;
-                case 1: movePosition(gameBoard, new Position(
-                        position.getX() + 1, position.getY())); break;
-                case 2: movePosition(gameBoard, new Position(
-                        position.getX(), position.getY() - 1)); break;
-                case 3: movePosition(gameBoard, new Position(
-                        position.getX(), position.getY() + 1)); break;
-                case 4: break;  // stay
-            }
+
+        Position next = (dist <= visionRange) ? stepToward(player.getPosition()) : randomStep();
+        if (next != null) {
+            movePosition(board, next);
         }
+    }
+
+    // -----------------------------------------------------------------------
+    // Movement helpers
+    // -----------------------------------------------------------------------
+
+    /** Returns the cardinal neighbour one step closer to the target. */
+    private Position stepToward(Position target) {
+        int dx = target.getX() - position.getX();
+        int dy = target.getY() - position.getY();
+        if (Math.abs(dx) >= Math.abs(dy)) {
+            return new Position(position.getX() + Integer.signum(dx), position.getY());
+        } else {
+            return new Position(position.getX(), position.getY() + Integer.signum(dy));
+        }
+    }
+
+    /** Random cardinal step; case 4 = stay put (returns null). */
+    private Position randomStep() {
+        switch (RANDOM.nextInt(5)) {
+            case 0: return new Position(position.getX() - 1, position.getY());
+            case 1: return new Position(position.getX() + 1, position.getY());
+            case 2: return new Position(position.getX(),     position.getY() - 1);
+            case 3: return new Position(position.getX(),     position.getY() + 1);
+            default: return null; // stay
+        }
+    }
+
+    // -----------------------------------------------------------------------
+    // Occupant / board display
+    // -----------------------------------------------------------------------
+
+    @Override
+    public String ToString() { return "m"; }
+
+    @Override
+    public String description() {
+        return name
+                + "     Health: "  + healthAmount + "/" + healthPool
+                + "     Attack: "  + attackPoint
+                + "     Defence: " + defencePoint;
     }
 }

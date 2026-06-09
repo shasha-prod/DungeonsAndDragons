@@ -1,27 +1,81 @@
 package dnd.business.units;
 
+import dnd.business.board.GameBoard;
+
+/**
+ * A stationary enemy that alternates between visible and invisible states.
+ *
+ * Visible   → shown as 'T' on the board; attacks any player that steps on it.
+ * Invisible → shown as '.' (indistinguishable from empty floor); still attacks.
+ *
+ * Visibility cycle (per tick):
+ *   ticks 0 .. visibilityTime-1  → visible
+ *   ticks visibilityTime .. visibilityTime+invisibilityTime-1 → invisible
+ *   then resets.
+ */
 public class Trap extends Enemy {
+
     private int invisibilityTime;
     private int visibilityTime;
     private int ticksCount;
     private boolean visible;
 
-    public Trap(String name, int healthPool, int healthAmount, int attackPoint, int defencePoint, int invisibilityTime,  int visibilityTime, int experience) {
-        super(name, healthPool, healthAmount, attackPoint, defencePoint,experience);
-        this.ticksCount = 0;
+    public Trap(String name, int healthPool, int healthAmount,
+                int attackPoint, int defencePoint,
+                int visibilityTime, int invisibilityTime,
+                int experienceValue) {
+        super(name, healthPool, healthAmount, attackPoint, defencePoint, experienceValue);
+        this.visibilityTime  = visibilityTime;
         this.invisibilityTime = invisibilityTime;
-        this.visibilityTime = visibilityTime;
-        this.visible = true;
+        this.ticksCount      = 0;
+        this.visible         = true;
     }
-    public void OnGameTick(){
-        if(ticksCount < this.visibilityTime){
-            this.visible = true;
-        }
-        else this.visible = false;
-        ticksCount++;
-        if(this.ticksCount > this.invisibilityTime+this.visibilityTime){this.ticksCount = 0;}
-    }
-    public void onEnemyTurn(){
 
+    // -----------------------------------------------------------------------
+    // Enemy AI turn — traps are stationary; they only tick their visibility
+    // -----------------------------------------------------------------------
+
+    @Override
+    public void onEnemyTurn(Player player, GameBoard board) {
+        onGameTick();
+    }
+
+    // -----------------------------------------------------------------------
+    // Visibility cycle
+    // -----------------------------------------------------------------------
+
+    /** Advance the visibility cycle by one tick. */
+    public void onGameTick() {
+        ticksCount++;
+        if (ticksCount >= visibilityTime + invisibilityTime) {
+            ticksCount = 0;
+        }
+        visible = ticksCount < visibilityTime;
+    }
+
+    public boolean isVisible() {
+        return visible;
+    }
+
+    // -----------------------------------------------------------------------
+    // Occupant / board display
+    // -----------------------------------------------------------------------
+
+    /**
+     * When invisible the trap blends into the floor ('.').
+     * When visible it shows as 'T'.
+     */
+    @Override
+    public String ToString() {
+        return visible ? "T" : ".";
+    }
+
+    @Override
+    public String description() {
+        return name
+                + "     Health: "  + healthAmount + "/" + healthPool
+                + "     Attack: "  + attackPoint
+                + "     Defence: " + defencePoint
+                + "     Visible: " + visible;
     }
 }
