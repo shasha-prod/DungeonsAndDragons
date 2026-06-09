@@ -47,4 +47,7 @@ public abstract class Enemy extends Unit {
      * @param board  the live game board (used for movement)
      */
     public abstract void onEnemyTurn(Player player, GameBoard board);
+
+    public int getExperienceValue() { return experienceValue; }
+
 }

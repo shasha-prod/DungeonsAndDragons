@@ -1,5 +1,9 @@
 package dnd.business.units;
 
+import dnd.business.board.Position;
+import dnd.business.visitors.OccupantVisitor;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class Hunter extends Player{
@@ -22,13 +26,32 @@ public class Hunter extends Player{
     }
 
     @Override
+    public void accept(OccupantVisitor visitor) {
+
+    }
+
+    @Override
     public void castAbility(List<Enemy> enemies) {
-        if(arrowCount < 0){
+        if(arrowCount <= 0){
             addMessage(this.name + " has no arrows.");
+            return;
         }
         List<Enemy> closeEnemies = getEnemiesInRange(enemies, this.range);
-        Enemy chosen = chooseRandomEnemy(closeEnemies);
-        chosen.takeDamage(attackPoint);
+        Enemy chosen = closestEnemy(closeEnemies);
+        if(chosen != null){
+            chosen.takeDamage(attackPoint);
+        }
+    }
+
+    private Enemy closestEnemy(List<Enemy> closeEnemies){
+        int minimum = Integer.MAX_VALUE;
+        Enemy chosen = null;
+        for (Enemy e : closeEnemies) {
+            if (e.isAlive() && Range.range(this.position, e.getPosition())< minimum) {
+                minimum = Range.range(this.position, e.getPosition());
+            }
+        }
+        return chosen;
     }
 
 

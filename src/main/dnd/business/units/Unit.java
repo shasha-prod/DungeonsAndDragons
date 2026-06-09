@@ -59,7 +59,7 @@ public abstract class Unit implements Occupant, CellVisitor, OccupantVisitor {
     public void visit(Floor floor) {
         if (floor.getCurrentOccupant() == null) {
             // Clear the old cell and move
-            board.setCell(position, new Floor(position));
+            board.setOccupant(position, null);
             floor.setCurrentOccupant(this);
             position = targetPosition;
         } else {
@@ -83,10 +83,7 @@ public abstract class Unit implements Occupant, CellVisitor, OccupantVisitor {
     // -----------------------------------------------------------------------
 
     @Override
-    public void accept(OccupantVisitor visitor) {
-        // Concrete subclasses (Player / Enemy) provide the specific dispatch.
-        // This base method is intentionally left empty; see Enemy and Player.
-    }
+    public abstract void accept(OccupantVisitor visitor);
 
     // -----------------------------------------------------------------------
     // Movement
@@ -112,7 +109,7 @@ public abstract class Unit implements Occupant, CellVisitor, OccupantVisitor {
      * Roll-based attack: damage = max(0, attackRoll - defenseRoll).
      * Notifies all observers and announces death if the target dies.
      */
-    protected void attack(Unit target) {
+    protected String attack(Unit target) {
         int attackRoll  = RANDOM.nextInt(attackPoint) + 1;
         int defenseRoll = RANDOM.nextInt(Math.max(target.defencePoint, 1)) + 1;
         int damage      = Math.max(0, attackRoll - defenseRoll);

@@ -1,5 +1,6 @@
 package dnd.business.units;
 
+import dnd.business.visitors.OccupantVisitor;
 import dnd.cli.CLIHandler;
 
 import java.util.ArrayList;
@@ -41,23 +42,23 @@ public class Mage extends Player{
         return false;
     }
 
-    public void gameTick(){
-        currentMana = Math.min(currentMana + 1 * playerLevel ,manaPool);
-    }
-
     @Override
     public void castAbility(List<Enemy> enemyList){
         if(currentMana < manaCost){
             addMessage("Cannot cast ability, it costs "+manaCost+" to Mana, and we only have  " + currentMana );
+            return;
         }
         addMessage(this.name + " casts Blizzard");
         currentMana = currentMana - manaCost;
         int hits = 0;
-        List closeEnemies = getEnemiesInRange(enemyList,abilityRange);
         while(hits< hitsCount){
-            chooseRandomEnemy(closeEnemies).takeDamage(spellPower);
+            List<Enemy> inRange = getEnemiesInRange(enemyList, abilityRange);
+            if (inRange.isEmpty()) break;
+            Enemy target = chooseRandomEnemy(inRange);
+            int defRoll = random.nextInt(target.defencePoint + 1);
+            int damage = Math.max(0, spellPower - defRoll);
+            target.takeDamage(damage);
             hits++;
-
         }
     }
     public void OnGameTick(){
@@ -67,6 +68,11 @@ public class Mage extends Player{
         return this.name +"     Health: " + this.healthAmount + "/" + this.healthPool + "     Attack: " + this.attackPoint +
                 "     Defence: " + this.defencePoint + "     Level: " + this.playerLevel + "     Experience: " + this.experience +
                 "/50" + "    Mana: " + this.manaCost + "/" + this.manaPool +"    Spell Power: " + this.spellPower;
+    }
+
+    @Override
+    public void accept(OccupantVisitor visitor) {
+
     }
 
 }

@@ -24,8 +24,8 @@ public abstract class Player extends Unit implements HeroicUnit {
     }
 
     public boolean levelUp() {
-        if(experience > 50*playerLevel) {
-            experience = 0;
+        if(experience >= 50*playerLevel) {
+            experience -= 50 * playerLevel;
             playerLevel =  playerLevel + 1;
             healthPool = healthPool + (10*playerLevel);
             healthAmount = healthPool;
@@ -42,10 +42,16 @@ public abstract class Player extends Unit implements HeroicUnit {
     public void visit(Player player) {
         // Player visiting themselves doesnt do anything
     }
-
     @Override
     public void visit(Enemy enemy) {
-        //
+        String result = attack(enemy);
+        addMessage(result);
+        if (!enemy.isAlive()) {
+            addMessage(enemy.getName() + " died. +" + enemy.getExperienceValue() + " XP");
+            experience += enemy.getExperienceValue();
+            levelUp();
+            board.moveUnit(this, this.position, enemy.getPosition());
+        }
     }
 
     public void castAbility(java.util.List<Enemy> enemies) {
@@ -60,7 +66,7 @@ public abstract class Player extends Unit implements HeroicUnit {
         // Leave empty here. Subclasses like Warrior will override it.
     }
     @Override
-    public String ToString() {
+    public String toString() {
         return "@";
     }
     protected List<Enemy> getEnemiesInRange(List<Enemy> enemies, double range) {

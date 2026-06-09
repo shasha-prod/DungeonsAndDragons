@@ -32,11 +32,17 @@ public class Rogue extends Player {
     public void castAbility(List<Enemy> enemies) {
         if(currentEnergy < cost){
             addMessage("Cannot cast ability, it costs "+cost+" to use special ability, and we only have  " + currentEnergy );
+            return;
         }
         currentEnergy -= cost;
         List<Enemy> closeEnemies = getEnemiesInRange(enemies,2);
-        for (Enemy enemy :closeEnemies){
-            enemy.takeDamage(attackPoint);
+        if(closeEnemies.isEmpty()){
+            addMessage(name + " cast special ability but no enemies in range.");
+        }
+        for (Enemy enemy : closeEnemies) {
+            int defRoll = rand.nextInt(enemy.defencePoint + 1);
+            int damage = Math.max(0, attackPoint - defRoll);
+            enemy.takeDamage(damage);
         }
     }
     public String description() {

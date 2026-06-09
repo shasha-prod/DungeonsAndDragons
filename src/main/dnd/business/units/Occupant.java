@@ -7,7 +7,7 @@ public interface Occupant {
      * Returns the single-character board representation of this occupant.
      * Used by Floor.toString() to render the map tile.
      */
-    String ToString();
+    String toString();
 
     /**
      * Double-dispatch entry point (Level 2 of the Visitor pattern).
