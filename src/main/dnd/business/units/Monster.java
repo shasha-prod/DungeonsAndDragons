@@ -15,10 +15,10 @@ public class Monster extends Enemy {
     private int visionRange;
     private static final Random RANDOM = new Random();
 
-    public Monster(String name, int healthPool, int healthAmount,
+    public Monster(String name, int healthPool,
                    int attackPoint, int defencePoint,
                    int visionRange, int experienceValue,Position pos) {
-        super(name, healthPool, healthAmount, attackPoint, defencePoint, experienceValue,pos);
+        super(name, healthPool, attackPoint, defencePoint, experienceValue,pos);
         this.visionRange = visionRange;
     }
 

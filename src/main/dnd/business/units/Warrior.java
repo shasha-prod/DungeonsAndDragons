@@ -57,6 +57,9 @@ public class Warrior extends Player {
         }
         chosen.takeDamage(this.healthPool/10);
         addMessage(this.name + " used Avenger's Shield, healing for " + (10*defencePoint));
+        if (!chosen.isAlive()) {
+            onEnemyKilled(chosen);
+        }
     }
 
 

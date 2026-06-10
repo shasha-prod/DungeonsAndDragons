@@ -21,11 +21,11 @@ public class Trap extends Enemy {
     private int ticksCount;
     private boolean visible;
 
-    public Trap(String name, int healthPool, int healthAmount,
+    public Trap(String name, int healthPool,
                 int attackPoint, int defencePoint,
                 int visibilityTime, int invisibilityTime,
                 int experienceValue, Position pos) {
-        super(name, healthPool, healthAmount, attackPoint, defencePoint, experienceValue, pos);
+        super(name, healthPool, attackPoint, defencePoint, experienceValue, pos);
         this.visibilityTime  = visibilityTime;
         this.invisibilityTime = invisibilityTime;
         this.ticksCount      = 0;

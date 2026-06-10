@@ -50,6 +50,12 @@ public class Rogue extends Player {
             int defRoll = rand.nextInt(enemy.defencePoint + 1);
             int damage = Math.max(0, attackPoint - defRoll);
             enemy.takeDamage(damage);
+            addMessage(enemy.getName() + " rolled " + defRoll + " defense points.");
+            addMessage(name + " hit " + enemy.getName() + " for " + damage
+                    + " ability damage.");
+            if (!enemy.isAlive()) {
+                onEnemyKilled(enemy);
+            }
         }
     }
     public String description() {

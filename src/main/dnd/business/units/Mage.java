@@ -69,6 +69,9 @@ public class Mage extends Player{
             int defRoll = random.nextInt(target.defencePoint + 1);
             int damage = Math.max(0, spellPower - defRoll);
             target.takeDamage(damage);
+            if (!target.isAlive()) {
+                onEnemyKilled(target);
+            }
             hits++;
         }
     }

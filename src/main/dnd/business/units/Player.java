@@ -49,11 +49,16 @@ public abstract class Player extends Unit implements HeroicUnit {
         String result = attack(enemy);
         addMessage(result);
         if (!enemy.isAlive()) {
-            addMessage(enemy.getName() + " died. +" + enemy.getExperienceValue() + " XP");
-            experience += enemy.getExperienceValue();
-            levelUp();
+            onEnemyKilled(enemy);
             board.moveUnit(this, this.position, enemy.getPosition());
         }
+    }
+
+    protected void onEnemyKilled(Enemy enemy) {
+        addMessage(enemy.getName() + " died. " + name + " gained "
+                + enemy.getExperienceValue() + " XP");
+        experience += enemy.getExperienceValue();
+        levelUp();
     }
 
     public abstract void castAbility(java.util.List<Enemy> enemies);

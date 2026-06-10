@@ -19,11 +19,11 @@ public class Boss extends Enemy {
     private int abilityFrequency;
     private int combatTicks;
 
-    public Boss(String name, int healthPool, int healthAmount,
+    public Boss(String name, int healthPool,
                 int attackPoint, int defencePoint,
                 int visionRange, int abilityFrequency,
-                int experienceValue) {
-        super(name, healthPool, healthAmount, attackPoint, defencePoint, experienceValue);
+                int experienceValue,Position pos) {
+        super(name, healthPool, attackPoint, defencePoint, experienceValue, pos);
         this.visionRange      = visionRange;
         this.abilityFrequency = abilityFrequency;
         this.combatTicks      = 0;

@@ -8,9 +8,9 @@ public abstract class Enemy extends Unit {
 
     protected int experienceValue;
 
-    public Enemy(String name, int healthPool, int healthAmount,
+    public Enemy(String name, int healthPool,
                  int attackPoint, int defencePoint, int experienceValue, Position pos) {
-        super(name, healthPool, healthAmount, attackPoint, defencePoint,pos);
+        super(name, healthPool, attackPoint, defencePoint,pos);
         this.experienceValue = experienceValue;
     }
 

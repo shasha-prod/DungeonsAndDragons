@@ -42,6 +42,9 @@ public class Hunter extends Player{
         Enemy chosen = closestEnemy(closeEnemies);
         if(chosen != null){
             chosen.takeDamage(attackPoint);
+            if (!chosen.isAlive()) {
+                onEnemyKilled(chosen);
+            }
         }
     }
 
