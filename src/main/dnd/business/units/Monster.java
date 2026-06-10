@@ -17,8 +17,8 @@ public class Monster extends Enemy {
 
     public Monster(String name, int healthPool, int healthAmount,
                    int attackPoint, int defencePoint,
-                   int visionRange, int experienceValue) {
-        super(name, healthPool, healthAmount, attackPoint, defencePoint, experienceValue);
+                   int visionRange, int experienceValue,Position pos) {
+        super(name, healthPool, healthAmount, attackPoint, defencePoint, experienceValue,pos);
         this.visionRange = visionRange;
     }
 
@@ -75,7 +75,7 @@ public class Monster extends Enemy {
     // -----------------------------------------------------------------------
 
     @Override
-    public String ToString() { return "m"; }
+    public String toString() { return "m"; }
 
     @Override
     public String description() {

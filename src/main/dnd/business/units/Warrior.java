@@ -1,4 +1,5 @@
 package dnd.business.units;
+import dnd.business.board.Position;
 import dnd.business.visitors.OccupantVisitor;
 
 import java.util.List;
@@ -9,12 +10,17 @@ public class Warrior extends Player {
     private int remainingCooldown;
     private Random random = new Random();
 
-    public Warrior(String name, int healthPool, int healthAmount, int attackPoint, int defencePoint, int experience, int playerLevel, int abilityCooldown) {
-        super(name, healthPool, healthAmount, attackPoint, defencePoint, experience, playerLevel);
+    public Warrior(String name, int healthPool, int attackPoint, int defencePoint, int abilityCooldown, Position pos) {
+        super(name, healthPool, attackPoint, defencePoint, pos);
         this.abilityCooldown = abilityCooldown;
         this.remainingCooldown = 0;
     }
 
+    public Warrior(String name, int healthPool, int attackPoint, int defencePoint, int abilityCooldown) {
+        super(name, healthPool, attackPoint, defencePoint, null);
+        this.abilityCooldown = abilityCooldown;
+        this.remainingCooldown = 0;
+    }
     public boolean levelUp(){
         boolean level = super.levelUp();
         if(level){

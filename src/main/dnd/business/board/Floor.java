@@ -29,7 +29,7 @@ public class Floor extends Cell {
         if (currentOccupant == null) {
             return ".";
         }
-        return currentOccupant.ToString();
+        return currentOccupant.toString();
     }
 
 }

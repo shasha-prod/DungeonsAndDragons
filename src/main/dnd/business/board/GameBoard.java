@@ -11,7 +11,7 @@ public class GameBoard {
     }
 
     public GameBoard(int width, int height) {
-        this.gameBoard = new Cell[width][height];
+        this.gameBoard = new Cell[height][width];
         emptyBoard();
     }
 

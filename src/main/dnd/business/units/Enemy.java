@@ -1,6 +1,7 @@
 package dnd.business.units;
 
 import dnd.business.board.GameBoard;
+import dnd.business.board.Position;
 import dnd.business.visitors.OccupantVisitor;
 
 public abstract class Enemy extends Unit {
@@ -8,8 +9,8 @@ public abstract class Enemy extends Unit {
     protected int experienceValue;
 
     public Enemy(String name, int healthPool, int healthAmount,
-                 int attackPoint, int defencePoint, int experienceValue) {
-        super(name, healthPool, healthAmount, attackPoint, defencePoint);
+                 int attackPoint, int defencePoint, int experienceValue, Position pos) {
+        super(name, healthPool, healthAmount, attackPoint, defencePoint,pos);
         this.experienceValue = experienceValue;
     }
 

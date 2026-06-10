@@ -11,13 +11,18 @@ public class Hunter extends Player{
     private int arrowCount;
     private int ticksCount;
 
-    public Hunter(String name, int healthPool, int healthAmount, int attackPoint, int defencePoint, int experience, int playerLevel, int range) {
-        super(name, healthPool, healthAmount, attackPoint, defencePoint, experience, playerLevel);
+    public Hunter(String name, int healthPool, int attackPoint, int defencePoint, int range, Position pos) {
+        super(name, healthPool, attackPoint, defencePoint, pos);
         this.range = range;
         this.arrowCount = 10* playerLevel;
         this.ticksCount = 0;
     }
-
+    public Hunter(String name, int healthPool, int attackPoint, int defencePoint, int range) {
+        super(name, healthPool, attackPoint, defencePoint, null);
+        this.range = range;
+        this.arrowCount = 10* playerLevel;
+        this.ticksCount = 0;
+    }
 
     public String description() {
         return this.name +"     Health: " + this.healthAmount + "/" + this.healthPool + "     Attack: " + this.attackPoint +
@@ -25,10 +30,7 @@ public class Hunter extends Player{
                 + "    Arrows: " + this.arrowCount + "    Range: " + this.range ;
     }
 
-    @Override
-    public void accept(OccupantVisitor visitor) {
 
-    }
 
     @Override
     public void castAbility(List<Enemy> enemies) {
@@ -41,6 +43,11 @@ public class Hunter extends Player{
         if(chosen != null){
             chosen.takeDamage(attackPoint);
         }
+    }
+
+    @Override
+    public void onGameTick() {
+
     }
 
     private Enemy closestEnemy(List<Enemy> closeEnemies){

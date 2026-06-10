@@ -1,6 +1,7 @@
 package dnd.business.units;
 
 import dnd.business.board.GameBoard;
+import dnd.business.board.Position;
 
 /**
  * A stationary enemy that alternates between visible and invisible states.
@@ -23,8 +24,8 @@ public class Trap extends Enemy {
     public Trap(String name, int healthPool, int healthAmount,
                 int attackPoint, int defencePoint,
                 int visibilityTime, int invisibilityTime,
-                int experienceValue) {
-        super(name, healthPool, healthAmount, attackPoint, defencePoint, experienceValue);
+                int experienceValue, Position pos) {
+        super(name, healthPool, healthAmount, attackPoint, defencePoint, experienceValue, pos);
         this.visibilityTime  = visibilityTime;
         this.invisibilityTime = invisibilityTime;
         this.ticksCount      = 0;
@@ -66,7 +67,7 @@ public class Trap extends Enemy {
      * When visible it shows as 'T'.
      */
     @Override
-    public String ToString() {
+    public String toString() {
         return visible ? "T" : ".";
     }
 

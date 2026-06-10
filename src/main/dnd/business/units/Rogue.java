@@ -1,17 +1,24 @@
 package dnd.business.units;
 
+import dnd.business.board.Position;
+
 import java.util.List;
 
 public class Rogue extends Player {
     private int cost;
     private int currentEnergy;
 
-    public Rogue(String name, int healthPool, int healthAmount, int attackPoint, int defencePoint, int experience, int playerLevel, int cost) {
-        super(name, healthPool, healthAmount, attackPoint, defencePoint, experience, playerLevel);
+    public Rogue(String name, int healthPool, int attackPoint, int defencePoint, int cost, Position pos) {
+        super(name, healthPool, attackPoint, defencePoint, pos);
         this.cost = cost;
         this.currentEnergy = 100;
     }
 
+    public Rogue(String name, int healthPool, int attackPoint, int defencePoint, int cost) {
+        super(name, healthPool, attackPoint, defencePoint, null);
+        this.cost = cost;
+        this.currentEnergy = 100;
+    }
     @Override
     public boolean levelUp() {
         boolean level = super.levelUp();

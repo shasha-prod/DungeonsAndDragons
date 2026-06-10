@@ -91,7 +91,7 @@ public class Boss extends Enemy {
     // -----------------------------------------------------------------------
 
     @Override
-    public String ToString() { return "B"; }
+    public String toString() { return "B"; }
 
     @Override
     public String description() {

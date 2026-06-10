@@ -1,5 +1,6 @@
 package dnd.business.units;
 
+import dnd.business.board.Position;
 import dnd.business.visitors.OccupantVisitor;
 import dnd.cli.CLIHandler;
 
@@ -16,17 +17,27 @@ public class Mage extends Player{
     private int abilityRange;
     private Random random = new Random();
 
-    public Mage(String name, int healthPool, int healthAmount, int attackPoint, int defencePoint, int experience, int playerLevel, int manaPool, int manaCost,
-                int spellPower, int hitsCount, int abilityRange) {
-        super(name, healthPool, healthAmount, attackPoint, defencePoint, experience, playerLevel);
+    public Mage(String name, int healthPool, int attackPoint, int defencePoint, int manaPool, int manaCost,
+                int spellPower, int hitsCount, int abilityRange, Position pos) {
+        super(name, healthPool, attackPoint, defencePoint, pos);
         this.manaPool = manaPool;
         this.currentMana = manaPool/4;
         this.manaCost = manaCost;
         this.spellPower = spellPower;
         this.hitsCount = hitsCount;
         this.abilityRange = abilityRange;
-
     }
+    public Mage(String name, int healthPool, int attackPoint, int defencePoint, int manaPool, int manaCost,
+                int spellPower, int hitsCount, int abilityRange) {
+        super(name, healthPool, attackPoint, defencePoint, null);
+        this.manaPool = manaPool;
+        this.currentMana = manaPool/4;
+        this.manaCost = manaCost;
+        this.spellPower = spellPower;
+        this.hitsCount = hitsCount;
+        this.abilityRange = abilityRange;
+    }
+
     @Override
     public boolean levelUp() {
         boolean level = super.levelUp();
@@ -61,9 +72,13 @@ public class Mage extends Player{
             hits++;
         }
     }
-    public void OnGameTick(){
+
+    @Override
+    public void onGameTick() {
         currentMana = Math.min(manaPool, currentMana+1*playerLevel);
+
     }
+
     public String description() {
         return this.name +"     Health: " + this.healthAmount + "/" + this.healthPool + "     Attack: " + this.attackPoint +
                 "     Defence: " + this.defencePoint + "     Level: " + this.playerLevel + "     Experience: " + this.experience +

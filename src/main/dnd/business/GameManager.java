@@ -1,4 +1,5 @@
 package dnd.business;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -11,7 +12,6 @@ import dnd.business.units.Player;
 import dnd.cli.CLIHandler;
 import dnd.business.board.Position;
 import dnd.business.units.Unit;
-import dnd.business.board.Cell;
 
 public class GameManager {
     private List<GameObserver> observers;
@@ -22,10 +22,10 @@ public class GameManager {
     private List<Enemy> enemies;
     private File[] levelFiles;
 
-    public GameManager() {
+    public GameManager(CLIHandler cli) {
         this.observers = new ArrayList<>();
-        this.cli = new CLIHandler();
-        this.addObserver(cli);
+        this.cli = cli;
+        this.addObserver(this.cli);
         this.factory = new UnitFactory();
     }
 
@@ -52,9 +52,11 @@ public class GameManager {
         String choiceStr = cli.getPlayerAction();
         int choice = Integer.parseInt(choiceStr);
         this.player = factory.createPlayer(choice - 1); // UI is 1-based; array is 0-based
-
+        for (GameObserver o : observers) {
+            o.onMessage("You have selected: "+ player.getName());
+        }
         // Attach UI to the player so they can announce combat/level ups
-        for(GameObserver o : observers) {
+        for (GameObserver o : observers) {
             this.player.addObserver(o);
         }
 
@@ -62,12 +64,15 @@ public class GameManager {
         for (File levelFile : levelFiles) {
             boolean survived = playLevel(levelFile);
             if (!survived) {
-                cli.onMessage("Game Over.");
+                for (GameObserver o : observers) {
+                    o.onMessage("Game Over.");
+                }
                 return;
             }
         }
-
-        cli.onMessage("You win!");
+        for (GameObserver o : observers) {
+            o.onMessage("Game Over.");
+        }
     }
 
     // --- The Core Game Loop ---
@@ -78,8 +83,8 @@ public class GameManager {
         this.enemies = parser.getParsedEnemies();
 
         // Attach UI to all newly spawned enemies
-        for(Enemy e : enemies) {
-            for(GameObserver o : observers) {
+        for (Enemy e : enemies) {
+            for (GameObserver o : observers) {
                 e.addObserver(o);
             }
         }
@@ -101,6 +106,16 @@ public class GameManager {
             for (Enemy enemy : enemies) {
                 if (!enemy.isDead()) {
                     enemy.onEnemyTurn(player, board);
+                    for (String msg : enemy.drainMessages()) {
+                        for (GameObserver o : observers) {
+                            o.onMessage(msg);
+                        }
+                    }
+                    for (String msg : player.drainMessages()) {
+                        for (GameObserver o : observers) {
+                            o.onMessage(msg);
+                        }
+                    }
                 }
             }
 
@@ -111,28 +126,41 @@ public class GameManager {
         return !player.isDead();
     }
 
-    // --- Action Processing ---
-    private void processPlayerAction(String input) {
-        Position currentPos = player.getPosition();
-        Position targetPos = currentPos;
+// --- Action Processing ---
+        private void processPlayerAction (String input){
+            Position currentPos = player.getPosition();
+            Position targetPos = currentPos;
 
-        switch (input) {
-            case "w": targetPos = new Position(currentPos.getX(), currentPos.getY() - 1); break;
-            case "s": targetPos = new Position(currentPos.getX(), currentPos.getY() + 1); break;
-            case "a": targetPos = new Position(currentPos.getX() - 1, currentPos.getY()); break;
-            case "d": targetPos = new Position(currentPos.getX() + 1, currentPos.getY()); break;
-            case "e":
-                player.castAbility(enemies);
-                return;
-            case "q":
-                return; // Do nothing
-            default:
-                return;
+            switch (input) {
+                case "w":
+                    targetPos = new Position(currentPos.getX(), currentPos.getY() - 1);
+                    break;
+                case "s":
+                    targetPos = new Position(currentPos.getX(), currentPos.getY() + 1);
+                    break;
+                case "a":
+                    targetPos = new Position(currentPos.getX() - 1, currentPos.getY());
+                    break;
+                case "d":
+                    targetPos = new Position(currentPos.getX() + 1, currentPos.getY());
+                    break;
+                case "e":
+                    player.castAbility(enemies);
+                    return;
+                case "q":
+                    return; // Do nothing
+                default:
+                    return;
+            }
+            // Trigger the Visitor Pattern for movement/combat via movePosition,
+            // which sets player.board and player.targetPosition before dispatching.
+            player.movePosition(board, targetPos);
+            // After player action
+            for (String msg : player.drainMessages()) {
+                for (GameObserver o : observers) {
+                    o.onMessage(msg);
+                }
+            }
         }
 
-        // Trigger the Visitor Pattern for movement/combat via movePosition,
-        // which sets player.board and player.targetPosition before dispatching.
-        player.movePosition(board, targetPos);
     }
-
-}

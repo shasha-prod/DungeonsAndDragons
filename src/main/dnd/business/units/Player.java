@@ -1,7 +1,9 @@
 package dnd.business.units;
 
 import dnd.business.board.Floor;
+import dnd.business.board.Position;
 import dnd.business.board.Wall;
+import dnd.business.visitors.OccupantVisitor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,14 +15,10 @@ public abstract class Player extends Unit implements HeroicUnit {
 
     protected Random rand = new Random();
 
-    public Player(String name, int healthPool, int healthAmount, int attackPoint, int defencePoint) {
-        super(name,healthPool,healthAmount,attackPoint,defencePoint);
+    public Player(String name, int healthPool, int attackPoint, int defencePoint, Position pos) {
+        super(name,healthPool,attackPoint,defencePoint,pos);
         this.experience = 0;
-        this.playerLevel = 1;
-    }
-
-    public Player(String name, int healthPool, int healthAmount, int attackPoint, int defencePoint, int experience, int playerLevel) {
-        super(name,healthPool,healthAmount,attackPoint,defencePoint);
+        this.playerLevel = 0;
     }
 
     public boolean levelUp() {
@@ -39,6 +37,10 @@ public abstract class Player extends Unit implements HeroicUnit {
         unit.visit(this);
     }
     @Override
+    public void accept(OccupantVisitor visitor) {
+        visitor.visit(this);  // 'this' is Player → calls visit(Player)
+    }
+    @Override
     public void visit(Player player) {
         // Player visiting themselves doesnt do anything
     }
@@ -54,17 +56,14 @@ public abstract class Player extends Unit implements HeroicUnit {
         }
     }
 
-    public void castAbility(java.util.List<Enemy> enemies) {
-        //
-    }
+    public abstract void castAbility(java.util.List<Enemy> enemies);
 
     public int getPlayerLevel() {
         return this.playerLevel; // Assuming your level variable is named playerLevel
     }
 
-    public void onGameTick() {
-        // Leave empty here. Subclasses like Warrior will override it.
-    }
+    public abstract void onGameTick() ;
+
     @Override
     public String toString() {
         return "@";

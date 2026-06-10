@@ -22,18 +22,22 @@ public abstract class Unit implements Occupant, CellVisitor, OccupantVisitor {
     private List<String> messages = new ArrayList<>();
     private static final Random RANDOM = new Random();
 
-    public Unit(String name, int healthPool, int healthAmount, int attackPoint, int defencePoint, Position position) {
+    public Unit(String name, int healthPool, int attackPoint, int defencePoint, Position position) {
         this.name = name;
         this.healthPool = healthPool;
-        this.healthAmount = healthAmount;
+        this.healthAmount = healthPool;
         this.attackPoint = attackPoint;
         this.defencePoint = defencePoint;
         this.position = position;
     }
 
-    public Unit(String name, int healthPool, int healthAmount, int attackPoint, int defencePoint) {
-        this(name, healthPool, healthAmount, attackPoint, defencePoint, null);
-    }
+    public Unit(String name, int healthPool, int attackPoint, int defencePoint) {
+        this.name = name;
+        this.healthPool = healthPool;
+        this.healthAmount = healthPool;
+        this.attackPoint = attackPoint;
+        this.defencePoint = defencePoint;
+        this.position = null;    }
 
     // -----------------------------------------------------------------------
     // Abstract contract
@@ -114,18 +118,18 @@ public abstract class Unit implements Occupant, CellVisitor, OccupantVisitor {
         int defenseRoll = RANDOM.nextInt(Math.max(target.defencePoint, 1)) + 1;
         int damage      = Math.max(0, attackRoll - defenseRoll);
         target.takeDamage(damage);
+        for (GameObserver o : observers) {
+            o.onCombat(this, target, attackRoll, defenseRoll, damage);
+        }
+        if (target.isDead()) {
+            for (GameObserver o : observers) {
+                o.onDeath(target);
+            }
+        }
         return String.format(
                 "%s attacked %s. Roll: %d - %d = %d damage.",
-                name, defender.name, attackRoll, defenseRoll, damage
+                name, target.name, attackRoll, defenseRoll, damage
         );
-//        for (GameObserver o : observers) {
-//            o.onCombat(this, target, attackRoll, defenseRoll, damage);
-//        }
-//        if (target.isDead()) {
-//            for (GameObserver o : observers) {
-//                o.onDeath(target);
-//            }
-//        }
     }
     public void takeDamage(int amount) {
         healthAmount = Math.max(0, healthAmount - amount);
