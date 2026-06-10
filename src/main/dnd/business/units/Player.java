@@ -62,12 +62,11 @@ public abstract class Player extends Unit implements HeroicUnit {
     }
 
     public abstract void castAbility(java.util.List<Enemy> enemies);
+    public abstract void onGameTick() ;
 
     public int getPlayerLevel() {
         return this.playerLevel; // Assuming your level variable is named playerLevel
     }
-
-    public abstract void onGameTick() ;
 
     @Override
     public String toString() {

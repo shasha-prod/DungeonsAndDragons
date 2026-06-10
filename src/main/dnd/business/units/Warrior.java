@@ -35,10 +35,6 @@ public class Warrior extends Player {
         return false;
     }
 
-    public void gameTick(){
-        remainingCooldown--;
-    }
-
     @Override
     public void castAbility(List<Enemy> enemies) {
         if(remainingCooldown > 0){

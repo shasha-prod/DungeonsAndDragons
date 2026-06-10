@@ -24,13 +24,23 @@ public class Hunter extends Player{
         this.ticksCount = 0;
     }
 
+    public boolean levelUp(){
+        boolean level = super.levelUp();
+        if(level){
+            arrowCount = arrowCount + (10* playerLevel);
+            attackPoint = attackPoint + (2* playerLevel);
+            defencePoint = defencePoint + playerLevel;
+            addMessage(this.name + " has reached level " + this.playerLevel + " +" + (10* playerLevel) +
+                    " Arrow Count, +"+ (2* playerLevel) + " Attack, +" + (playerLevel) + " Defence");
+            return true;
+        }
+        return false;
+    }
     public String description() {
         return this.name +"     Health: " + this.healthAmount + "/" + this.healthPool + "     Attack: " + this.attackPoint +
                 "     Defence: " + this.defencePoint + "     Level: " + this.playerLevel + "     Experience: " + this.experience
                 + "    Arrows: " + this.arrowCount + "    Range: " + this.range ;
     }
-
-
 
     @Override
     public void castAbility(List<Enemy> enemies) {
@@ -45,11 +55,19 @@ public class Hunter extends Player{
             if (!chosen.isAlive()) {
                 onEnemyKilled(chosen);
             }
+            arrowCount--;
         }
     }
 
     @Override
     public void onGameTick() {
+        if(ticksCount == 10){
+            arrowCount = arrowCount + playerLevel;
+            ticksCount = 0;
+        }
+        else{
+            ticksCount++;
+        }
 
     }
 
