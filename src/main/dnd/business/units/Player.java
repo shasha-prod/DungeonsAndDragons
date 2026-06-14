@@ -50,7 +50,7 @@ public abstract class Player extends Unit implements HeroicUnit {
         addMessage(result);
         if (!enemy.isAlive()) {
             onEnemyKilled(enemy);
-            board.moveUnit(this, this.position, enemy.getPosition());
+            board.moveUnit(this, enemy.getPosition());
         }
     }
 

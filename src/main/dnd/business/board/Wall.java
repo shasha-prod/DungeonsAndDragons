@@ -4,8 +4,7 @@ import dnd.business.visitors.CellVisitor;
 
 public class Wall extends Cell {
 
-    public Wall(Position pos) {
-        super();
+    public Wall() {
     }
 
     @Override

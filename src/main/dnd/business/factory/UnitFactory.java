@@ -11,6 +11,7 @@ public class UnitFactory {
 
     public UnitFactory() {
     }
+    /// gets the User player decision and return a new object of the Player for GameBoard storing.
     public Player createPlayer(int i) {
         switch (i) {
             case 0: return new Warrior("Jon Snow", 300, 30, 4, 3);
@@ -23,7 +24,7 @@ public class UnitFactory {
             default: throw new IllegalArgumentException("Invalid player choice");
         }
     }
-
+    /// creates the enemy needing to be created for GameManager storing and GameBoard storing.
     public Enemy createEnemy(char tile, Position pos) {
         switch (tile) {
             case 's':

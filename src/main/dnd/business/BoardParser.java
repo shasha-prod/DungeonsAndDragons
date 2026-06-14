@@ -50,11 +50,11 @@ public class BoardParser {
                 Position pos = new Position(x, y);
 
                 if (tile == '#') {
-                    board.setCell(pos, new Wall(pos));
+                    board.setCell(pos, new Wall());
                 } else if (tile == '.') {
-                    board.setCell(pos, new Floor(pos));
+                    board.setCell(pos, new Floor());
                 } else if (tile == '@') {
-                    Floor startFloor = new Floor(pos);
+                    Floor startFloor = new Floor();
                     player.setPosition(pos); // Move player to starting spot
                     startFloor.setCurrentOccupant(player);
                     board.setCell(pos, startFloor);
@@ -62,7 +62,7 @@ public class BoardParser {
                     // It's an enemy
                     Enemy e = factory.createEnemy(tile, pos);
                     enemies.add(e);
-                    Floor enemyFloor = new Floor(pos);
+                    Floor enemyFloor = new Floor();
                     enemyFloor.setCurrentOccupant(e);
                     board.setCell(pos, enemyFloor);
                 }

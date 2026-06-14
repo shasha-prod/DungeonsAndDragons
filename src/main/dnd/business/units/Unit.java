@@ -89,21 +89,17 @@ public abstract class Unit implements Occupant, CellVisitor, OccupantVisitor {
     @Override
     public abstract void accept(OccupantVisitor visitor);
 
-    // -----------------------------------------------------------------------
-    // Movement
-    // -----------------------------------------------------------------------
-
-    /**
-     * Attempt to move to newPosition on the given board.
-     * The board reference is stored so that visit(Floor) can update cells
-     * after a successful move.
-     */
-    public void movePosition(GameBoard gameBoard, Position newPosition) {
-        this.board = gameBoard;          // <-- fixes the null-board NPE
-        this.targetPosition = newPosition;
-        Cell targetCell = gameBoard.getCell(targetPosition);
-        targetCell.accept(this);
-    }
+//    /**
+//     * Attempt to move to newPosition on the given board.
+//     * The board reference is stored so that visit(Floor) can update cells
+//     * after a successful move.
+//     */
+//    public void movePosition(GameBoard gameBoard, Position newPosition) {
+//        this.board = gameBoard;          // <-- fixes the null-board NPE
+//        this.targetPosition = newPosition;
+//        Cell targetCell = gameBoard.getCell(targetPosition);
+//        targetCell.accept(this);
+//    }
 
     // -----------------------------------------------------------------------
     // Combat

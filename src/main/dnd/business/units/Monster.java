@@ -40,7 +40,7 @@ public class Monster extends Enemy {
 
         Position next = (dist <= visionRange) ? stepToward(player.getPosition()) : randomStep();
         if (next != null) {
-            movePosition(board, next);
+            board.moveUnit(this, next);
         }
     }
 

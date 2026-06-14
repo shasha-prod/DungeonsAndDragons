@@ -38,7 +38,7 @@ public class Boss extends Enemy {
         if (position == null || player.getPosition() == null) return;
 
         combatTicks++;
-        int dist = Range.range(position, player.getPosition());
+        double dist = this.position.getCoordinates(player.getPosition());
 
         // Special ability fires every abilityFrequency ticks
         if (combatTicks % abilityFrequency == 0) {
@@ -51,7 +51,7 @@ public class Boss extends Enemy {
         } else if (dist <= visionRange) {
             // Chase the player
             Position next = stepToward(player.getPosition());
-            movePosition(board, next);
+            board.moveUnit(this, next);
         }
         // Beyond vision range — boss stays put
     }
