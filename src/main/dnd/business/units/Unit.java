@@ -89,17 +89,17 @@ public abstract class Unit implements Occupant, CellVisitor, OccupantVisitor {
     @Override
     public abstract void accept(OccupantVisitor visitor);
 
-//    /**
-//     * Attempt to move to newPosition on the given board.
-//     * The board reference is stored so that visit(Floor) can update cells
-//     * after a successful move.
-//     */
-//    public void movePosition(GameBoard gameBoard, Position newPosition) {
-//        this.board = gameBoard;          // <-- fixes the null-board NPE
-//        this.targetPosition = newPosition;
-//        Cell targetCell = gameBoard.getCell(targetPosition);
-//        targetCell.accept(this);
-//    }
+    /**
+     * Attempt to move to newPosition on the given board.
+     * The board reference is stored so that visit(Floor) can update cells
+     * after a successful move.
+     */
+    public void movePosition(GameBoard gameBoard, Position newPosition) {
+        this.board = gameBoard;          // <-- fixes the null-board NPE
+        this.targetPosition = newPosition;
+        Cell targetCell = gameBoard.getCell(targetPosition);
+        targetCell.accept(this);
+    }
 
     // -----------------------------------------------------------------------
     // Combat
@@ -108,8 +108,10 @@ public abstract class Unit implements Occupant, CellVisitor, OccupantVisitor {
     /**
      * Roll-based attack: damage = max(0, attackRoll - defenseRoll).
      * Notifies all observers and announces death if the target dies.
+     *
+     * @return
      */
-    protected String attack(Unit target) {
+    public String attack(Unit target) {
         int attackRoll  = RANDOM.nextInt(attackPoint) + 1;
         int defenseRoll = RANDOM.nextInt(Math.max(target.defencePoint, 1)) + 1;
         int damage      = Math.max(0, attackRoll - defenseRoll);
@@ -122,10 +124,7 @@ public abstract class Unit implements Occupant, CellVisitor, OccupantVisitor {
                 o.onDeath(target);
             }
         }
-        return String.format(
-                "%s attacked %s. Roll: %d - %d = %d damage.",
-                name, target.name, attackRoll, defenseRoll, damage
-        );
+        return "attacked!";
     }
     public void takeDamage(int amount) {
         healthAmount = Math.max(0, healthAmount - amount);
@@ -157,5 +156,9 @@ public abstract class Unit implements Occupant, CellVisitor, OccupantVisitor {
     public void setPosition(Position p) { this.position = p; }
     public boolean isDead()       { return healthAmount <= 0; }
     public boolean isAlive()       { return healthAmount > 0; }
+    public int getHealthAmount() {return healthAmount;}
 
+    //For testing
+    public int getAttackPoints() {return attackPoint;}
+    public int getDefensePoints() {return  defencePoint;}
 }

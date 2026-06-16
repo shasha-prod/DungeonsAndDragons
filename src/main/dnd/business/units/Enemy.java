@@ -7,11 +7,13 @@ import dnd.business.visitors.OccupantVisitor;
 public abstract class Enemy extends Unit {
 
     protected int experienceValue;
+    protected char tile;
 
-    public Enemy(String name, int healthPool,
+    public Enemy(char tile,String name, int healthPool,
                  int attackPoint, int defencePoint, int experienceValue, Position pos) {
         super(name, healthPool, attackPoint, defencePoint,pos);
         this.experienceValue = experienceValue;
+        this.tile = tile;
     }
 
     // -----------------------------------------------------------------------
@@ -50,5 +52,7 @@ public abstract class Enemy extends Unit {
     public abstract void onEnemyTurn(Player player, GameBoard board);
 
     public int getExperienceValue() { return experienceValue; }
+
+    public String toString() { return "" +tile; }
 
 }

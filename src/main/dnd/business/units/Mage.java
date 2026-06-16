@@ -88,9 +88,9 @@ public class Mage extends Player{
                 "/50" + "    Mana: " + this.manaCost + "/" + this.manaPool +"    Spell Power: " + this.spellPower;
     }
 
-    @Override
-    public void accept(OccupantVisitor visitor) {
-
-    }
-
+    //For testing
+    public int getCurrentMana() {return currentMana;}
+    public void addExperience(int i) {experience = experience +i;}
+    public int getSpellPower() {return spellPower;}
+    public int getManaPool() {return manaPool;}
 }

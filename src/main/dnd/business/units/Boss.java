@@ -19,11 +19,11 @@ public class Boss extends Enemy {
     private int abilityFrequency;
     private int combatTicks;
 
-    public Boss(String name, int healthPool,
+    public Boss(char tile, String name, int healthPool,
                 int attackPoint, int defencePoint,
                 int visionRange, int abilityFrequency,
                 int experienceValue,Position pos) {
-        super(name, healthPool, attackPoint, defencePoint, experienceValue, pos);
+        super(tile, name, healthPool, attackPoint, defencePoint, experienceValue, pos);
         this.visionRange      = visionRange;
         this.abilityFrequency = abilityFrequency;
         this.combatTicks      = 0;
@@ -89,9 +89,6 @@ public class Boss extends Enemy {
     // -----------------------------------------------------------------------
     // Occupant / board display
     // -----------------------------------------------------------------------
-
-    @Override
-    public String toString() { return "B"; }
 
     @Override
     public String description() {

@@ -46,8 +46,7 @@ public abstract class Player extends Unit implements HeroicUnit {
     }
     @Override
     public void visit(Enemy enemy) {
-        String result = attack(enemy);
-        addMessage(result);
+        attack(enemy);
         if (!enemy.isAlive()) {
             onEnemyKilled(enemy);
             board.moveUnit(this, enemy.getPosition());
@@ -88,4 +87,10 @@ public abstract class Player extends Unit implements HeroicUnit {
         }
         return inRange.get(rand.nextInt(inRange.size()));
     }
+
+    // For Testing
+    public int getHealthPool() {return healthPool;}
+    public void addExperience(int i) {experience = experience + i;}
+    public int getExperience() {return experience;}
+
 }

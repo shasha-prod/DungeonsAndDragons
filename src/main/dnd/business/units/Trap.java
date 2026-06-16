@@ -20,16 +20,18 @@ public class Trap extends Enemy {
     private int visibilityTime;
     private int ticksCount;
     private boolean visible;
+    private char tile;
 
-    public Trap(String name, int healthPool,
+    public Trap(char tile, String name, int healthPool,
                 int attackPoint, int defencePoint,
                 int visibilityTime, int invisibilityTime,
                 int experienceValue, Position pos) {
-        super(name, healthPool, attackPoint, defencePoint, experienceValue, pos);
+        super(tile,name, healthPool, attackPoint, defencePoint, experienceValue, pos);
         this.visibilityTime  = visibilityTime;
         this.invisibilityTime = invisibilityTime;
         this.ticksCount      = 0;
         this.visible         = true;
+        this.tile           = tile;
     }
 
     // -----------------------------------------------------------------------
@@ -68,7 +70,10 @@ public class Trap extends Enemy {
      */
     @Override
     public String toString() {
-        return visible ? "T" : ".";
+        if (visible) {
+            return String.valueOf(tile);
+        }
+        return ".";
     }
 
     @Override

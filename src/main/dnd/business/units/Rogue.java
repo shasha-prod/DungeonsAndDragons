@@ -14,7 +14,7 @@ public class Rogue extends Player {
         this.currentEnergy = 100;
     }
 
-    public Rogue(String name, int healthPool, int attackPoint, int defencePoint, int cost) {
+    public Rogue( String name, int healthPool, int attackPoint, int defencePoint, int cost) {
         super(name, healthPool, attackPoint, defencePoint, null);
         this.cost = cost;
         this.currentEnergy = 100;
@@ -63,4 +63,8 @@ public class Rogue extends Player {
                 "     Defence: " + this.defencePoint + "     Level: " + this.playerLevel + "     Experience: " + this.experience
                 + "    Energy: " + this.currentEnergy;
     }
+
+    //For Testing
+    public int getCurrentEnergy() {return currentEnergy;}
+
 }

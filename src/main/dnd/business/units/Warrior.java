@@ -67,12 +67,9 @@ public class Warrior extends Player {
     public String description() {
         return this.name +"     Health: " + this.healthAmount + "/" + this.healthPool + "     Attack: " + this.attackPoint +
                 "     Defence: " + this.defencePoint + "     Level: " + this.playerLevel +
-                "     Experience: " + this.experience + "     Cooldown: " + this.remainingCooldown;
+                "     Experience: " + this.experience + "/" + (50*playerLevel) +  " Cooldown: " + this.remainingCooldown + "/" + this.abilityCooldown;
     }
 
-    @Override
-    public void accept(OccupantVisitor visitor) {
-
-    }
-
+    //For testing
+    public int getRemainingCooldown() {return this.remainingCooldown;}
 }

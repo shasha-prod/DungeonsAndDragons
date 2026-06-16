@@ -15,10 +15,10 @@ public class Monster extends Enemy {
     private int visionRange;
     private static final Random RANDOM = new Random();
 
-    public Monster(String name, int healthPool,
+    public Monster(char tile, String name, int healthPool,
                    int attackPoint, int defencePoint,
                    int visionRange, int experienceValue,Position pos) {
-        super(name, healthPool, attackPoint, defencePoint, experienceValue,pos);
+        super(tile, name, healthPool, attackPoint, defencePoint, experienceValue,pos);
         this.visionRange = visionRange;
     }
 
@@ -40,7 +40,7 @@ public class Monster extends Enemy {
 
         Position next = (dist <= visionRange) ? stepToward(player.getPosition()) : randomStep();
         if (next != null) {
-            board.moveUnit(this, next);
+            movePosition(board, next);
         }
     }
 
@@ -75,7 +75,7 @@ public class Monster extends Enemy {
     // -----------------------------------------------------------------------
 
     @Override
-    public String toString() { return "m"; }
+    public String toString() { return "" + tile; }
 
     @Override
     public String description() {

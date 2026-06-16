@@ -154,7 +154,7 @@ public class GameManager {
             }
             // Trigger the Visitor Pattern for movement/combat via movePosition,
             // which sets player.board and player.targetPosition before dispatching.
-            board.moveUnit(player, targetPos);
+            player.movePosition(board, targetPos);
             // After player action
             for (String msg : player.drainMessages()) {
                 for (GameObserver o : observers) {

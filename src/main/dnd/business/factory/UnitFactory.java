@@ -28,31 +28,31 @@ public class UnitFactory {
     public Enemy createEnemy(char tile, Position pos) {
         switch (tile) {
             case 's':
-                return new Monster("Gold Cloak", 80 ,8, 3, 3, 25, pos);
+                return new Monster('s',"Gold Cloak", 80 ,8, 3, 3, 25, pos);
             case 'k':
-                return new Monster("Knight", 200 , 14, 8, 4, 50, pos);
+                return new Monster('k',"Knight", 200 , 14, 8, 4, 50, pos);
             case 'B':
-                return new Trap("Bonus Trap", 1, 1, 1, 250, 1, 5, pos);
+                return new Trap('B', "Bonus Trap", 1, 1, 1, 250, 1, 5, pos);
             case 'q':
-                return new Monster("Queen's Guard", 400, 20, 15, 5, 100, pos);
+                return new Monster('q',"Queen's Guard", 400, 20, 15, 5, 100, pos);
             case 'z':
-                return new Monster("Wright", 600, 30, 15, 3, 100, pos);
+                return new Monster('z',"Wright", 600, 30, 15, 3, 100, pos);
             case 'b':
-                return new Monster("Bear", 1000, 75, 30, 4, 250, pos);
+                return new Monster('b',"Bear", 1000, 75, 30, 4, 250, pos);
             case 'g':
-                return new Monster("Giant", 1500,  100, 40, 5, 500, pos);
+                return new Monster('g',"Giant", 1500,  100, 40, 5, 500, pos);
             case 'w':
-                return new Monster("White Walker", 2000,  150, 50, 6, 1000, pos);
+                return new Monster('w',"White Walker", 2000,  150, 50, 6, 1000, pos);
             case 'M':
-                return new Monster("The Mountain", 1000,  60, 25, 6, 500, pos);
+                return new Monster('M',"The Mountain", 1000,  60, 25, 6, 500, pos);
             case 'C':
-                return new Monster("Queen Cersei", 100,  10, 10, 1, 1000, pos);
+                return new Monster('C',"Queen Cersei", 100,  10, 10, 1, 1000, pos);
             case 'K':
-                return new Monster("Night's King", 5000,  300, 150, 8, 5000, pos);
+                return new Monster('K',"Night's King", 5000,  300, 150, 8, 5000, pos);
             case 'Q':
-                return new Trap("Queen's Trap", 250, 50, 10, 7, 3, 100, pos);
+                return new Trap('Q',"Queen's Trap", 250, 50, 10, 7, 3, 100, pos);
             case 'D':
-                return new Trap("Death Trap", 500,  100, 20, 10, 1, 250, pos);
+                return new Trap('D',"Death Trap", 500,  100, 20, 10, 1, 250, pos);
             default:
                 throw new IllegalStateException("Unknown tile: " + tile);
         }
