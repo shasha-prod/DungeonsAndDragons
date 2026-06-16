@@ -16,9 +16,9 @@ public abstract class Player extends Unit implements HeroicUnit {
     protected Random rand = new Random();
 
     public Player(String name, int healthPool, int attackPoint, int defencePoint, Position pos) {
-        super(name,healthPool,attackPoint,defencePoint,pos);
-        this.experience = 0;
-        this.playerLevel = 0;
+        super(name, healthPool, attackPoint, defencePoint, pos);
+        this.experience   = 0;
+        this.playerLevel  = 1;   // players begin at level 1
     }
 
     public boolean levelUp() {
@@ -56,8 +56,7 @@ public abstract class Player extends Unit implements HeroicUnit {
     protected void onEnemyKilled(Enemy enemy) {
         addMessage(enemy.getName() + " died. " + name + " gained "
                 + enemy.getExperienceValue() + " XP");
-        experience += enemy.getExperienceValue();
-        levelUp();
+        addExperience(enemy.getExperienceValue());   // handles level-up loop + notifications
     }
 
     public abstract void castAbility(java.util.List<Enemy> enemies);
@@ -88,9 +87,24 @@ public abstract class Player extends Unit implements HeroicUnit {
         return inRange.get(rand.nextInt(inRange.size()));
     }
 
-    // For Testing
-    public int getHealthPool() {return healthPool;}
-    public void addExperience(int i) {experience = experience + i;}
-    public int getExperience() {return experience;}
+    // -----------------------------------------------------------------------
+    // Accessors (also used in tests)
+    // -----------------------------------------------------------------------
+
+    public int getHealthPool()   { return healthPool; }
+    public int getExperience()   { return experience; }
+
+    /**
+     * Grant XP and immediately resolve any resulting level-ups.
+     * Observer notifications fire for each level gained.
+     */
+    public void addExperience(int xp) {
+        experience += xp;
+        while (levelUp()) {
+            for (var o : observers) {
+                o.onLevelUp(this);
+            }
+        }
+    }
 
 }
