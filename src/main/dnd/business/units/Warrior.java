@@ -24,12 +24,15 @@ public class Warrior extends Player {
     public boolean levelUp(){
         boolean level = super.levelUp();
         if(level){
-            remainingCooldown=0;
-            healthPool = healthPool + (5* playerLevel);
-            attackPoint = attackPoint + (2* playerLevel);
-            defencePoint = defencePoint + playerLevel;
-            addMessage(this.name + " has reached level " + this.playerLevel + " +" + (15* playerLevel) +
-                    " Health, +"+ (4* playerLevel) + " Attack, +" + (2* playerLevel) + " Defence");
+            remainingCooldown = 0;
+            healthPool   += 5 * playerLevel;
+            attackPoint  += 2 * playerLevel;
+            defencePoint += playerLevel;
+            healthAmount  = healthPool;   // re-apply full-heal after warrior bonus HP is added
+            addMessage(name + " has reached level " + playerLevel
+                    + ": +" + (15 * playerLevel) + " Health"
+                    + ", +" + (4  * playerLevel) + " Attack"
+                    + ", +" + (2  * playerLevel) + " Defence");
             return true;
         }
         return false;

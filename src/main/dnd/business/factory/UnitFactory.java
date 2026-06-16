@@ -50,9 +50,9 @@ public class UnitFactory {
             case 'K':
                 return new Monster('K',"Night's King", 5000,  300, 150, 8, 5000, pos);
             case 'Q':
-                return new Trap('Q',"Queen's Trap", 250, 50, 10, 7, 3, 100, pos);
+                return new Trap('Q', "Queen's Trap", 250, 50, 10, 100, 3, 7, pos); // exp=100, vis=3, invis=7
             case 'D':
-                return new Trap('D',"Death Trap", 500,  100, 20, 10, 1, 250, pos);
+                return new Trap('D', "Death Trap", 500, 100, 20, 250, 10, 1, pos); // exp=250, vis=10, invis=1
             default:
                 throw new IllegalStateException("Unknown tile: " + tile);
         }

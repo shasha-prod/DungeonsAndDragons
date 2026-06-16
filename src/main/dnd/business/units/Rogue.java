@@ -22,13 +22,16 @@ public class Rogue extends Player {
     @Override
     public boolean levelUp() {
         boolean level = super.levelUp();
-        if(level) {
-            this.currentEnergy = 100;
-            this.attackPoint = this.attackPoint + (3 * playerLevel);
-            addMessage(this.name + " has reached level " + this.playerLevel + " +" + (10* playerLevel) +
-                    " Health, +"+ (2* playerLevel) + " Attack, +" + (playerLevel) + " Defence");
+        if (level) {
+            currentEnergy = 100;
+            attackPoint  += 3 * playerLevel;
+            healthAmount  = healthPool;   // full-heal after Rogue HP bonus
+            addMessage(name + " has reached level " + playerLevel
+                    + ": +" + (10 * playerLevel) + " Health"
+                    + ", +" + (2  * playerLevel) + " Attack"
+                    + ", +"  + playerLevel        + " Defence");
         }
-        return false;
+        return level;   // was always returning false — broke level-up chain
     }
 
     public void onGameTick(){

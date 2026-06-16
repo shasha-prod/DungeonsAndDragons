@@ -22,16 +22,23 @@ public class Trap extends Enemy {
     private boolean visible;
     private char tile;
 
+    /**
+     * @param experienceValue  XP awarded when the trap is destroyed
+     * @param visibilityTime   how many ticks the trap is shown per cycle
+     * @param invisibilityTime how many ticks the trap is hidden per cycle
+     */
     public Trap(char tile, String name, int healthPool,
                 int attackPoint, int defencePoint,
+                int experienceValue,
                 int visibilityTime, int invisibilityTime,
-                int experienceValue, Position pos) {
-        super(tile,name, healthPool, attackPoint, defencePoint, experienceValue, pos);
-        this.visibilityTime  = visibilityTime;
+                Position pos) {
+        super(tile, name, healthPool, attackPoint, defencePoint, experienceValue, pos);
+        this.experienceValue  = experienceValue;
+        this.visibilityTime   = visibilityTime;
         this.invisibilityTime = invisibilityTime;
-        this.ticksCount      = 0;
-        this.visible         = true;
-        this.tile           = tile;
+        this.ticksCount       = 0;
+        this.visible          = true;
+        this.tile             = tile;
     }
 
     // -----------------------------------------------------------------------
@@ -41,6 +48,12 @@ public class Trap extends Enemy {
     @Override
     public void onEnemyTurn(Player player, GameBoard board) {
         onGameTick();
+        // Traps are stationary but attack any player within striking range (< 2 tiles).
+        if (position != null && player.getPosition() != null
+                && Range.range(position, player.getPosition()) < 2) {
+            String log = attack(player);
+            addMessage(log);
+        }
     }
 
     // -----------------------------------------------------------------------
