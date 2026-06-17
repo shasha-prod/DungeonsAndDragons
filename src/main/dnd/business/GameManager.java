@@ -33,134 +33,125 @@ public class GameManager {
         this.observers.add(observer);
     }
 
+    // Helper — stops repeating the nested for loop everywhere
+    private void notify(String msg) {
+        for (GameObserver o : observers) {
+            o.onMessage(msg);
+        }
+    }
+
+    private void drainUnit(Unit unit) {
+        for (String msg : unit.drainMessages()) {
+            notify(msg);
+        }
+    }
+
     // --- Main Entry Point ---
     public void run(String levelDirPath) {
         File dir = new File(levelDirPath);
         if (!dir.exists() || !dir.isDirectory()) {
-            cli.onMessage("Error: Invalid directory path.");
+            notify("Error: Invalid directory path.");
             return;
         }
 
-        // Fetch and sort level files
-        this.levelFiles = dir.listFiles((d, name) -> name.startsWith("level") && name.endsWith(".txt"));
+        this.levelFiles = dir.listFiles((d, name) ->
+                name.startsWith("level") && name.endsWith(".txt"));
         if (this.levelFiles != null) {
-            Arrays.sort(this.levelFiles, (f1, f2) -> f1.getName().compareTo(f2.getName()));
+            Arrays.sort(this.levelFiles);
         }
 
-        // Initialize Player [cite: 60]
+        // Player selection
         cli.onStart();
         String choiceStr = cli.getPlayerAction();
         int choice = Integer.parseInt(choiceStr);
-        this.player = factory.createPlayer(choice - 1); // UI is 1-based; array is 0-based
-        for (GameObserver o : observers) {
-            o.onMessage("You have selected: "+ player.getName());
-        }
-        // Attach UI to the player so they can announce combat/level ups
-        for (GameObserver o : observers) {
-            this.player.addObserver(o);
-        }
+        this.player = factory.createPlayer(choice - 1);
+        notify("You have selected:");
+        notify(player.description());
 
-        // Play through all levels sequentially [cite: 65]
+        // REMOVED: no more attaching observers to player
+
+        // Play through all levels
         for (File levelFile : levelFiles) {
             boolean survived = playLevel(levelFile);
             if (!survived) {
-                for (GameObserver o : observers) {
-                    o.onMessage("Game Over.");
-                }
+                notify("Game Over!");
                 return;
             }
         }
-        for (GameObserver o : observers) {
-            o.onMessage("Game Over.");
-        }
+        notify("You won!");
     }
 
     // --- The Core Game Loop ---
     private boolean playLevel(File levelFile) {
-        // Parse the new board
         BoardParser parser = new BoardParser(factory, player);
         this.board = parser.parseLevel(levelFile);
         this.enemies = parser.getParsedEnemies();
 
-        // Attach UI to all newly spawned enemies
-        for (Enemy e : enemies) {
-            for (GameObserver o : observers) {
-                e.addObserver(o);
-            }
-        }
+        // REMOVED: no more attaching observers to enemies
 
-        // The Tick Loop [cite: 61-64]
         while (!player.isDead() && !enemies.isEmpty()) {
-            // 1. Render State
-            cli.onBoardUpdate(board);
-            cli.onPlayerStats(player);
+            // 1. Render state — through observer, not CLI directly
+            notify(board.toString());
+            notify(player.description());
 
-            // 2. Player Turn
+            // 2. Player turn
             String action = cli.getPlayerAction();
             processPlayerAction(action);
 
-            // Player class-specific updates (mana, cooldowns)
-            player.onGameTick();
-
-            // 3. Enemy Turn
-            for (Enemy enemy : enemies) {
+            // 3. Enemy turns
+            for (Enemy enemy : new ArrayList<>(enemies)) {
                 if (!enemy.isDead()) {
                     enemy.onEnemyTurn(player, board);
-                    for (String msg : enemy.drainMessages()) {
-                        for (GameObserver o : observers) {
-                            o.onMessage(msg);
-                        }
-                    }
-                    for (String msg : player.drainMessages()) {
-                        for (GameObserver o : observers) {
-                            o.onMessage(msg);
-                        }
-                    }
+                    drainUnit(enemy);
+                    drainUnit(player); // player might have been hit
                 }
             }
 
-            // 4. Cleanup
+            // 4. Cleanup dead enemies
             enemies.removeIf(Unit::isDead);
-        }
 
-        return !player.isDead();
-    }
+            // 5. Player resource regen AFTER everything
+            player.onGameTick();
 
-// --- Action Processing ---
-        private void processPlayerAction (String input){
-            Position currentPos = player.getPosition();
-            Position targetPos = currentPos;
-
-            switch (input) {
-                case "w":
-                    targetPos = new Position(currentPos.getX(), currentPos.getY() - 1);
-                    break;
-                case "s":
-                    targetPos = new Position(currentPos.getX(), currentPos.getY() + 1);
-                    break;
-                case "a":
-                    targetPos = new Position(currentPos.getX() - 1, currentPos.getY());
-                    break;
-                case "d":
-                    targetPos = new Position(currentPos.getX() + 1, currentPos.getY());
-                    break;
-                case "e":
-                    player.castAbility(enemies);
-                    return;
-                case "q":
-                    return; // Do nothing
-                default:
-                    return;
-            }
-            // Trigger the Visitor Pattern for movement/combat via movePosition,
-            // which sets player.board and player.targetPosition before dispatching.
-            player.movePosition(board, targetPos);
-            // After player action
-            for (String msg : player.drainMessages()) {
-                for (GameObserver o : observers) {
-                    o.onMessage(msg);
-                }
+            // 6. Check player death
+            if (player.isDead()) {
+                notify(board.toString());
+                return false;
             }
         }
 
+        return true;
     }
+
+    // --- Action Processing ---
+    private void processPlayerAction(String input) {
+        Position currentPos = player.getPosition();
+        Position targetPos;
+
+        switch (input) {
+            case "w":
+                targetPos = new Position(currentPos.getX(), currentPos.getY() - 1);
+                break;
+            case "s":
+                targetPos = new Position(currentPos.getX(), currentPos.getY() + 1);
+                break;
+            case "a":
+                targetPos = new Position(currentPos.getX() - 1, currentPos.getY());
+                break;
+            case "d":
+                targetPos = new Position(currentPos.getX() + 1, currentPos.getY());
+                break;
+            case "e":
+                player.castAbility(enemies);
+                drainUnit(player);
+                return;
+            case "q":
+                return;
+            default:
+                return;
+        }
+
+        player.movePosition(board, targetPos);
+        drainUnit(player);
+    }
+}

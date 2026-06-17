@@ -51,6 +51,9 @@ public class Trap extends Enemy {
         // Traps are stationary but attack any player within striking range (< 2 tiles).
         if (position != null && player.getPosition() != null
                 && Range.range(position, player.getPosition()) < 2) {
+            addMessage(name + " engaged in combat with " + player.getName() + ".");
+            addMessage(this.description());
+            addMessage(player.description());
             String log = attack(player);
             addMessage(log);
         }

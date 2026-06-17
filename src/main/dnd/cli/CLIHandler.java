@@ -29,42 +29,6 @@ public class CLIHandler implements GameObserver {
         System.out.println("7. Ygritte - Hunter (220 HP, 30 ATK, 2 DEF)");
     }
 
-    @Override
-    public void onBoardUpdate(GameBoard board) {
-        // Requires GameBoard to have a toString() that builds the map string
-        System.out.println(board.toString());
-    }
-
-    @Override
-    public void onPlayerStats(Player player) {
-        // Output format required by the assignment [cite: 317]
-        System.out.println(player.description());
-    }
-
-    @Override
-    public void onCombat(Unit attacker, Unit defender, int attackRoll, int defenseRoll, int damage) {
-        System.out.println(attacker.getName() + " engaged in combat with " + defender.getName() + ".");
-        System.out.println(attacker.description());
-        System.out.println(defender.description());
-        System.out.println(attacker.getName() + " rolled " + attackRoll + " attack points.");
-        System.out.println(defender.getName() + " rolled " + defenseRoll + " defense points.");
-        System.out.println(attacker.getName() + " dealt " + damage + " damage to " + defender.getName() + ".");
-    }
-
-    @Override
-    public void onLevelUp(Player player) {
-        System.out.println(player.getName() + " reached level " + player.getPlayerLevel() + ": +" + (player.getPlayerLevel() * 10) + " Health, +" + (player.getPlayerLevel() * 4) + " Attack, +" + player.getPlayerLevel() + " Defense!");
-    }
-
-    @Override
-    public void onAbilityCast(Player player, String abilityDescription) {
-        System.out.println(player.getName() + " cast " + abilityDescription + ".");
-    }
-
-    @Override
-    public void onDeath(Unit unit) {
-        System.out.println(unit.getName() + " died.");
-    }
 
     @Override
     public void onMessage(String msg) {

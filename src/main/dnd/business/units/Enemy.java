@@ -22,8 +22,11 @@ public abstract class Enemy extends Unit {
 
     @Override
     public void visit(Player player) {
-        attack(player);
-    }
+        addMessage(name + " engaged in combat with " + player.getName() + ".");
+        addMessage(this.description());
+        addMessage(player.description());
+        String result = attack(player);
+        addMessage(result);    }
 
     @Override
     public void visit(Enemy enemy) {

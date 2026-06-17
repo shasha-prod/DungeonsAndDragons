@@ -46,7 +46,11 @@ public abstract class Player extends Unit implements HeroicUnit {
     }
     @Override
     public void visit(Enemy enemy) {
-        attack(enemy);
+        addMessage(name + " engaged in combat with " + enemy.getName() + ".");
+        addMessage(this.description());
+        addMessage(enemy.description());
+        String result = attack(enemy);
+        addMessage(result);
         if (!enemy.isAlive()) {
             onEnemyKilled(enemy);
             board.moveUnit(this, enemy.getPosition());
@@ -101,9 +105,9 @@ public abstract class Player extends Unit implements HeroicUnit {
     public void addExperience(int xp) {
         experience += xp;
         while (levelUp()) {
-            for (var o : observers) {
-                o.onLevelUp(this);
-            }
+            System.out.println(name + " reached level " + playerLevel + ": +" + (playerLevel * 10)
+                    + " Health, +" + (playerLevel * 4) + " Attack, +" + playerLevel + " Defense!");
+
         }
     }
 

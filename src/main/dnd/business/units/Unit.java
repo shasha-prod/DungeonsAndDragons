@@ -121,16 +121,6 @@ public abstract class Unit implements Occupant, CellVisitor, OccupantVisitor {
                 + name + " rolled " + attackRoll + " attack. "
                 + target.getName() + " rolled " + defenseRoll + " defense. "
                 + "Damage dealt: " + damage + ".";
-        addMessage(log);
-
-        for (GameObserver o : observers) {
-            o.onCombat(this, target, attackRoll, defenseRoll, damage);
-        }
-        if (target.isDead()) {
-            for (GameObserver o : observers) {
-                o.onDeath(target);
-            }
-        }
         return log;
     }
     public void takeDamage(int amount) {

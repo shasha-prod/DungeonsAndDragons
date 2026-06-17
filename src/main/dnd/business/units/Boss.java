@@ -64,11 +64,9 @@ public class Boss extends Enemy {
         int rawDamage = attackPoint * 2;
         player.healthAmount -= rawDamage;
         addMessage(name + " unleashes a devastating ability, dealing " + rawDamage + " damage!");
-        for (var o : observers) {
-            o.onAbilityCast(player, name + "'s Special Strike");
-        }
+        System.out.println(name + " cast " + "'s Special Strike" + ".");
         if (player.isDead()) {
-            for (var o : observers) { o.onDeath(player); }
+            addMessage(player.getName() + " died.");
         }
     }
 
