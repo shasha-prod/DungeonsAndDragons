@@ -2,7 +2,6 @@ package dnd.business.units;
 
 import dnd.business.board.Position;
 import dnd.business.visitors.OccupantVisitor;
-import dnd.cli.CLIHandler;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -32,9 +32,8 @@ public class Hunter extends Player{
             defencePoint = defencePoint + playerLevel;
             addMessage(this.name + " has reached level " + this.playerLevel + " +" + (10* playerLevel) +
                     " Arrow Count, +"+ (2* playerLevel) + " Attack, +" + (playerLevel) + " Defence");
-            return true;
         }
-        return false;
+        return level;
     }
     public String description() {
         return this.name +"     Health: " + this.healthAmount + "/" + this.healthPool + "     Attack: " + this.attackPoint +
@@ -75,8 +74,9 @@ public class Hunter extends Player{
         int minimum = Integer.MAX_VALUE;
         Enemy chosen = null;
         for (Enemy e : closeEnemies) {
-            if (e.isAlive() && Range.range(this.position, e.getPosition())< minimum) {
+            if (e.isAlive() && Range.range(this.position, e.getPosition()) < minimum) {
                 minimum = Range.range(this.position, e.getPosition());
+                chosen = e;
             }
         }
         return chosen;
