@@ -33,8 +33,7 @@ public class Monster extends Enemy {
         int dist = Range.range(position, player.getPosition());
 
         if (dist <= 1) {
-            // Already adjacent — attack instead of stepping
-            attack(player);
+            visit(player);  // routes through visit(Player) which adds combat header
             return;
         }
 
@@ -80,8 +79,10 @@ public class Monster extends Enemy {
     @Override
     public String description() {
         return name
-                + "     Health: "  + healthAmount + "/" + healthPool
-                + "     Attack: "  + attackPoint
-                + "     Defence: " + defencePoint;
+                + "\t\tHealth: "         + healthAmount + "/" + healthPool
+                + "\t\tAttack: "         + attackPoint
+                + "\t\tDefense: "        + defencePoint
+                + "\t\tExperience Value: " + experienceValue
+                + "\t\tVision Range: "   + visionRange;
     }
 }

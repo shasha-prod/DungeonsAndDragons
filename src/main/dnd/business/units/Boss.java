@@ -46,8 +46,7 @@ public class Boss extends Enemy {
         }
 
         if (dist <= 1) {
-            // Adjacent — normal attack (special already fired above if applicable)
-            attack(player);
+            visit(player);  // routes through visit(Player) for proper combat header
         } else if (dist <= visionRange) {
             // Chase the player
             Position next = stepToward(player.getPosition());
@@ -62,11 +61,10 @@ public class Boss extends Enemy {
 
     private void castSpecialAbility(Player player) {
         int rawDamage = attackPoint * 2;
-        player.healthAmount -= rawDamage;
-        addMessage(name + " unleashes a devastating ability, dealing " + rawDamage + " damage!");
-        System.out.println(name + " cast " + "'s Special Strike" + ".");
+        player.takeDamage(rawDamage);
+        addMessage(name + " shoots " + player.getName() + " for " + rawDamage + " damage");
         if (player.isDead()) {
-            addMessage(player.getName() + " died.");
+            addMessage(player.getName() + " was killed by " + name + ".");
         }
     }
 
@@ -91,10 +89,12 @@ public class Boss extends Enemy {
     @Override
     public String description() {
         return name
-                + "     Health: "          + healthAmount + "/" + healthPool
-                + "     Attack: "          + attackPoint
-                + "     Defence: "         + defencePoint
-                + "     Ability in: "      + (abilityFrequency - (combatTicks % abilityFrequency))
+                + "\t\tHealth: "            + healthAmount + "/" + healthPool
+                + "\t\tAttack: "            + attackPoint
+                + "\t\tDefense: "           + defencePoint
+                + "\t\tExperience Value: "  + experienceValue
+                + "\t\tVision Range: "      + visionRange
+                + "\t\tAbility in: "        + (abilityFrequency - (combatTicks % abilityFrequency))
                 + " ticks";
     }
 }

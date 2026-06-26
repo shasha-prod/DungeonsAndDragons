@@ -25,8 +25,11 @@ public abstract class Enemy extends Unit {
         addMessage(name + " engaged in combat with " + player.getName() + ".");
         addMessage(this.description());
         addMessage(player.description());
-        String result = attack(player);
-        addMessage(result);    }
+        attack(player);   // attack() now adds the 3 roll/damage lines itself
+        if (player.isDead()) {
+            addMessage(player.getName() + " was killed by " + name + ".");
+        }
+    }
 
     @Override
     public void visit(Enemy enemy) {

@@ -60,8 +60,11 @@ public class GameManager {
             Arrays.sort(this.levelFiles);
         }
 
-        // Player selection
+        // Player selection — show full descriptions for all options
         cli.onStart();
+        for (int i = 0; i < 7; i++) {
+            notify((i + 1) + ". " + factory.createPlayer(i).description());
+        }
         String choiceStr = cli.getPlayerAction();
         int choice = Integer.parseInt(choiceStr);
         this.player = factory.createPlayer(choice - 1);
@@ -74,11 +77,12 @@ public class GameManager {
         for (File levelFile : levelFiles) {
             boolean survived = playLevel(levelFile);
             if (!survived) {
-                notify("Game Over!");
+                notify("Game Over.");
                 return;
             }
         }
         notify("You won!");
+        notify("Game Over.");
     }
 
     // --- The Core Game Loop ---
@@ -115,7 +119,9 @@ public class GameManager {
 
             // 6. Check player death
             if (player.isDead()) {
-                notify(board.toString());
+                notify("You lost.");
+                notify(board.toString());   // board shows X for dead player
+                notify(player.description());
                 return false;
             }
         }

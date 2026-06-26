@@ -29,10 +29,9 @@ public class Warrior extends Player {
             attackPoint  += 2 * playerLevel;
             defencePoint += playerLevel;
             healthAmount  = healthPool;   // re-apply full-heal after warrior bonus HP is added
-            addMessage(name + " has reached level " + playerLevel
-                    + ": +" + (15 * playerLevel) + " Health"
-                    + ", +" + (4  * playerLevel) + " Attack"
-                    + ", +" + (2  * playerLevel) + " Defence");
+            addMessage("                +" + (5 * playerLevel) + " bonus health, +"
+                    + (2 * playerLevel) + " bonus attack, +"
+                    + playerLevel       + " bonus defense");
             return true;
         }
         return false;
@@ -68,9 +67,12 @@ public class Warrior extends Player {
         }
     }
     public String description() {
-        return this.name +"     Health: " + this.healthAmount + "/" + this.healthPool + "     Attack: " + this.attackPoint +
-                "     Defence: " + this.defencePoint + "     Level: " + this.playerLevel +
-                "     Experience: " + this.experience + "/" + (50*playerLevel) +  " Cooldown: " + this.remainingCooldown + "/" + this.abilityCooldown;
+        return name + "\t\tHealth: " + healthAmount + "/" + healthPool
+                + "\t\tAttack: "    + attackPoint
+                + "\t\tDefense: "   + defencePoint
+                + "\t\tLevel: "     + playerLevel
+                + "\t\tExperience: " + experience + "/" + (50 * playerLevel)
+                + "\t\tCooldown: "  + remainingCooldown + "/" + abilityCooldown;
     }
 
     //For testing

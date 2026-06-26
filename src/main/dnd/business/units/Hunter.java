@@ -30,15 +30,20 @@ public class Hunter extends Player{
             arrowCount = arrowCount + (10* playerLevel);
             attackPoint = attackPoint + (2* playerLevel);
             defencePoint = defencePoint + playerLevel;
-            addMessage(this.name + " has reached level " + this.playerLevel + " +" + (10* playerLevel) +
-                    " Arrow Count, +"+ (2* playerLevel) + " Attack, +" + (playerLevel) + " Defence");
+            addMessage("                +" + (10 * playerLevel) + " bonus arrows, +"
+                    + (2 * playerLevel) + " bonus attack, +"
+                    + playerLevel       + " bonus defense");
         }
         return level;
     }
     public String description() {
-        return this.name +"     Health: " + this.healthAmount + "/" + this.healthPool + "     Attack: " + this.attackPoint +
-                "     Defence: " + this.defencePoint + "     Level: " + this.playerLevel + "     Experience: " + this.experience + "/" + (50 * playerLevel)
-                + "    Arrows: " + this.arrowCount + "    Range: " + this.range ;
+        return name + "\t\tHealth: "  + healthAmount + "/" + healthPool
+                + "\t\tAttack: "      + attackPoint
+                + "\t\tDefense: "     + defencePoint
+                + "\t\tLevel: "       + playerLevel
+                + "\t\tExperience: "  + experience + "/" + (50 * playerLevel)
+                + "\t\tArrows: "      + arrowCount
+                + "\t\tRange: "       + range;
     }
 
     @Override
@@ -69,6 +74,10 @@ public class Hunter extends Player{
         }
 
     }
+
+    // For testing
+    public int getArrowCount() { return arrowCount; }
+    public int getRange()       { return range; }
 
     private Enemy closestEnemy(List<Enemy> closeEnemies){
         int minimum = Integer.MAX_VALUE;

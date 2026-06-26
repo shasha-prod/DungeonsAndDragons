@@ -117,11 +117,11 @@ public abstract class Unit implements Occupant, CellVisitor, OccupantVisitor {
         int damage      = Math.max(0, attackRoll - defenseRoll);
         target.takeDamage(damage);
 
-        String log = name + " engaged in combat with " + target.getName() + ". "
-                + name + " rolled " + attackRoll + " attack. "
-                + target.getName() + " rolled " + defenseRoll + " defense. "
-                + "Damage dealt: " + damage + ".";
-        return log;
+        addMessage(name + " rolled " + attackRoll + " attack points.");
+        addMessage(target.getName() + " rolled " + defenseRoll + " defense points.");
+        String damageLine = name + " dealt " + damage + " damage to " + target.getName() + ".";
+        addMessage(damageLine);
+        return damageLine;
     }
     public void takeDamage(int amount) {
         healthAmount = Math.max(0, healthAmount - amount);

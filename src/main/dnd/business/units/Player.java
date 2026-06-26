@@ -49,8 +49,7 @@ public abstract class Player extends Unit implements HeroicUnit {
         addMessage(name + " engaged in combat with " + enemy.getName() + ".");
         addMessage(this.description());
         addMessage(enemy.description());
-        String result = attack(enemy);
-        addMessage(result);
+        attack(enemy);   // attack() now adds the 3 roll/damage lines itself
         if (!enemy.isAlive()) {
             onEnemyKilled(enemy);
             board.moveUnit(this, enemy.getPosition());
@@ -72,7 +71,7 @@ public abstract class Player extends Unit implements HeroicUnit {
 
     @Override
     public String toString() {
-        return "@";
+        return isDead() ? "X" : "@";
     }
     protected List<Enemy> getEnemiesInRange(List<Enemy> enemies, double range) {
         List<Enemy> inRange = new ArrayList<>();
@@ -105,9 +104,10 @@ public abstract class Player extends Unit implements HeroicUnit {
     public void addExperience(int xp) {
         experience += xp;
         while (levelUp()) {
-            System.out.println(name + " reached level " + playerLevel + ": +" + (playerLevel * 10)
-                    + " Health, +" + (playerLevel * 4) + " Attack, +" + playerLevel + " Defense!");
-
+            addMessage(name + " reached level " + playerLevel + ": +"
+                    + (10 * playerLevel) + " Health, +"
+                    + (4  * playerLevel) + " Attack, +"
+                    + playerLevel        + " Defense");
         }
     }
 

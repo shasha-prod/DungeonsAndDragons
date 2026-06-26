@@ -26,10 +26,7 @@ public class Rogue extends Player {
             currentEnergy = 100;
             attackPoint  += 3 * playerLevel;
             healthAmount  = healthPool;   // full-heal after Rogue HP bonus
-            addMessage(name + " has reached level " + playerLevel
-                    + ": +" + (10 * playerLevel) + " Health"
-                    + ", +" + (2  * playerLevel) + " Attack"
-                    + ", +"  + playerLevel        + " Defence");
+            addMessage("                +" + (3 * playerLevel) + " bonus attack, energy restored");
         }
         return level;   // was always returning false — broke level-up chain
     }
@@ -45,8 +42,9 @@ public class Rogue extends Player {
             return;
         }
         currentEnergy -= cost;
-        List<Enemy> closeEnemies = getEnemiesInRange(enemies,2);
-        if(closeEnemies.isEmpty()){
+        addMessage(name + " cast Fan of Knives.");
+        List<Enemy> closeEnemies = getEnemiesInRange(enemies, 2);
+        if (closeEnemies.isEmpty()) {
             addMessage(name + " cast special ability but no enemies in range.");
         }
         for (Enemy enemy : closeEnemies) {
@@ -62,9 +60,12 @@ public class Rogue extends Player {
         }
     }
     public String description() {
-        return this.name +"     Health: " + this.healthAmount + "/" + this.healthPool + "     Attack: " + this.attackPoint +
-                "     Defence: " + this.defencePoint + "     Level: " + this.playerLevel + "     Experience: " + this.experience
-                + "    Energy: " + this.currentEnergy;
+        return name + "\t\tHealth: "   + healthAmount + "/" + healthPool
+                + "\t\tAttack: "       + attackPoint
+                + "\t\tDefense: "      + defencePoint
+                + "\t\tLevel: "        + playerLevel
+                + "\t\tExperience: "   + experience + "/" + (50 * playerLevel)
+                + "\t\tEnergy: "       + currentEnergy + "/100";
     }
 
     //For Testing

@@ -45,9 +45,8 @@ public class Mage extends Player {
             manaPool = manaPool + (25 * playerLevel);
             currentMana = Math.min(currentMana + (manaPool / 4), manaPool);
             spellPower = spellPower + (10 * playerLevel);
-            addMessage(this.name + " has reached level " + this.playerLevel + " +" + (15 * playerLevel) +
-                    " Health, +" + (4 * playerLevel) + " Attack, +" + (2 * playerLevel) + " Defence, +" + (25 * playerLevel)
-                    + " Mana Pool, +" + (10 * playerLevel) + " Spell Power");
+            addMessage("                +" + (25 * playerLevel) + " maximum mana, +"
+                    + (10 * playerLevel) + " spell power");
             return true;
         }
         return false;
@@ -59,7 +58,7 @@ public class Mage extends Player {
             addMessage("Cannot cast ability, it costs " + manaCost + " to Mana, and we only have  " + currentMana);
             return;
         }
-        addMessage(this.name + " casts Blizzard");
+        addMessage(name + " cast Blizzard.");
         currentMana = currentMana - manaCost;
         int hits = 0;
         while (hits < hitsCount) {
@@ -87,9 +86,13 @@ public class Mage extends Player {
     }
 
     public String description() {
-        return this.name + "     Health: " + this.healthAmount + "/" + this.healthPool + "     Attack: " + this.attackPoint +
-                "     Defence: " + this.defencePoint + "     Level: " + this.playerLevel + "     Experience: " + this.experience +
-                "/50" + "    Mana: " + this.manaCost + "/" + this.manaPool + "    Spell Power: " + this.spellPower;
+        return name + "\t\tHealth: "    + healthAmount + "/" + healthPool
+                + "\t\tAttack: "        + attackPoint
+                + "\t\tDefense: "       + defencePoint
+                + "\t\tLevel: "         + playerLevel
+                + "\t\tExperience: "    + experience + "/" + (50 * playerLevel)
+                + "\t\tMana: "          + currentMana + "/" + manaPool
+                + "\t\tSpell Power: "   + spellPower;
     }
 
     //For testing

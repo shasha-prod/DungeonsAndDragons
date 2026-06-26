@@ -51,11 +51,7 @@ public class Trap extends Enemy {
         // Traps are stationary but attack any player within striking range (< 2 tiles).
         if (position != null && player.getPosition() != null
                 && Range.range(position, player.getPosition()) < 2) {
-            addMessage(name + " engaged in combat with " + player.getName() + ".");
-            addMessage(this.description());
-            addMessage(player.description());
-            String log = attack(player);
-            addMessage(log);
+            visit(player);  // routes through visit(Player) for proper combat header + death message
         }
     }
 
@@ -95,9 +91,10 @@ public class Trap extends Enemy {
     @Override
     public String description() {
         return name
-                + "     Health: "  + healthAmount + "/" + healthPool
-                + "     Attack: "  + attackPoint
-                + "     Defence: " + defencePoint
-                + "     Visible: " + visible;
+                + "\t\tHealth: "            + healthAmount + "/" + healthPool
+                + "\t\tAttack: "            + attackPoint
+                + "\t\tDefense: "           + defencePoint
+                + "\t\tExperience Value: "  + experienceValue
+                + "\t\tVisible: "           + visible;
     }
 }
