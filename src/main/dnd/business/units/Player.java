@@ -55,7 +55,7 @@ public abstract class Player extends Unit implements HeroicUnit {
 
     protected void onEnemyKilled(Enemy enemy) {
         addMessage(enemy.getName() + " died. " + name + " gained "
-                + enemy.getExperienceValue() + " XP");
+                + enemy.getExperienceValue() + " experience");
         addExperience(enemy.getExperienceValue());   // handles level-up loop + notifications
     }
 
@@ -97,10 +97,7 @@ public abstract class Player extends Unit implements HeroicUnit {
     public void addExperience(int xp) {
         experience += xp;
         while (levelUp()) {
-            addMessage(name + " reached level " + playerLevel + ": +"
-                    + (10 * playerLevel) + " Health, +"
-                    + (4  * playerLevel) + " Attack, +"
-                    + playerLevel        + " Defense");
+            // each subclass levelUp() adds its own message with combined stats
         }
     }
 

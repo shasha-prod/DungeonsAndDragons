@@ -25,14 +25,17 @@ public class Hunter extends Player{
     }
 
     public boolean levelUp(){
+        int oldDefence = defencePoint;
         boolean level = super.levelUp();
         if(level){
-            arrowCount = arrowCount + (10* playerLevel);
-            attackPoint = attackPoint + (2* playerLevel);
-            defencePoint = defencePoint + playerLevel;
-            addMessage("                +" + (10 * playerLevel) + " bonus arrows, +"
-                    + (2 * playerLevel) + " bonus attack, +"
-                    + playerLevel       + " bonus defense");
+            arrowCount   += 10 * playerLevel;
+            attackPoint  += 2  * playerLevel;
+            defencePoint += oldDefence;
+            healthAmount  = healthPool;
+            addMessage(name + " reached level " + playerLevel + ": +"
+                    + (10 * playerLevel)         + " Health, +"
+                    + (6  * playerLevel)         + " Attack, +"
+                    + (playerLevel + oldDefence) + " Defense");
         }
         return level;
     }
@@ -49,18 +52,25 @@ public class Hunter extends Player{
     @Override
     public void castAbility(List<Enemy> enemies) {
         if(arrowCount <= 0){
-            addMessage(this.name + " has no arrows.");
+            addMessage(name + " tried to shoot an arrow but has no arrows.");
             return;
         }
         List<Enemy> closeEnemies = getEnemiesInRange(enemies, this.range);
         Enemy chosen = closestEnemy(closeEnemies);
-        if(chosen != null){
-            chosen.takeDamage(attackPoint);
-            if (!chosen.isAlive()) {
-                onEnemyKilled(chosen);
-            }
-            arrowCount--;
+        if(chosen == null){
+            addMessage(name + " tried to shoot an arrow but there were no enemies in range.");
+            return;
         }
+        addMessage(name + " fired an arrow at " + chosen.getName() + ".");
+        int defRoll = rand.nextInt(chosen.defencePoint + 1);
+        int damage = Math.max(0, attackPoint - defRoll);
+        chosen.takeDamage(damage);
+        addMessage(chosen.getName() + " rolled " + defRoll + " defense points.");
+        addMessage(name + " hit " + chosen.getName() + " for " + damage + " ability damage.");
+        if (!chosen.isAlive()) {
+            onEnemyKilled(chosen);
+        }
+        arrowCount--;
     }
 
     @Override

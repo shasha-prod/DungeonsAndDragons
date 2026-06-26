@@ -43,6 +43,10 @@ public class Mage extends Player {
             manaPool = manaPool + (25 * playerLevel);
             currentMana = Math.min(currentMana + (manaPool / 4), manaPool);
             spellPower = spellPower + (10 * playerLevel);
+            addMessage(name + " reached level " + playerLevel + ": +"
+                    + (10 * playerLevel) + " Health, +"
+                    + (4  * playerLevel) + " Attack, +"
+                    + playerLevel        + " Defense");
             addMessage("                +" + (25 * playerLevel) + " maximum mana, +"
                     + (10 * playerLevel) + " spell power");
         }
@@ -52,7 +56,8 @@ public class Mage extends Player {
     @Override
     public void castAbility(List<Enemy> enemyList) {
         if (currentMana < manaCost) {
-            addMessage("Cannot cast ability, it costs " + manaCost + " to Mana, and we only have  " + currentMana);
+            addMessage(name + " tried to cast Blizzard, but there was not enough mana: "
+                    + currentMana + "/" + manaCost + ".");
             return;
         }
         addMessage(name + " cast Blizzard.");

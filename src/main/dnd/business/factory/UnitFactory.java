@@ -40,11 +40,11 @@ public class UnitFactory {
             case 'w':
                 return new Monster('w',"White Walker", 2000,  150, 50, 6, 1000, pos);
             case 'M':
-                return new Monster('M',"The Mountain", 1000,  60, 25, 6, 500, pos);
+                return new Boss('M', "The Mountain", 1000, 60, 25, 6, 5, 500, pos);
             case 'C':
-                return new Monster('C',"Queen Cersei", 100,  10, 10, 1, 1000, pos);
+                return new Boss('C', "Queen Cersei", 100, 10, 10, 1, 8, 1000, pos);
             case 'K':
-                return new Monster('K',"Night's King", 5000,  300, 150, 8, 5000, pos);
+                return new Boss('K', "Night's King", 5000, 300, 150, 8, 3, 5000, pos);
             case 'Q':
                 return new Trap('Q', "Queen's Trap", 250, 50, 10, 100, 3, 7, pos); // exp=100, vis=3, invis=7
             case 'D':

@@ -25,10 +25,13 @@ public class Rogue extends Player {
         if (level) {
             currentEnergy = 100;
             attackPoint  += 3 * playerLevel;
-            healthAmount  = healthPool;   // full-heal after Rogue HP bonus
-            addMessage("                +" + (3 * playerLevel) + " bonus attack, energy restored");
+            healthAmount  = healthPool;
+            addMessage(name + " reached level " + playerLevel + ": +"
+                    + (10 * playerLevel) + " Health, +"
+                    + (7  * playerLevel) + " Attack, +"
+                    + playerLevel        + " Defense");
         }
-        return level;   // was always returning false — broke level-up chain
+        return level;
     }
 
     public void onGameTick(){
@@ -38,15 +41,13 @@ public class Rogue extends Player {
     @Override
     public void castAbility(List<Enemy> enemies) {
         if(currentEnergy < cost){
-            addMessage("Cannot cast ability, it costs "+cost+" to use special ability, and we only have  " + currentEnergy );
+            addMessage(name + " tried to cast Fan of Knives, but there was not enough energy: "
+                    + currentEnergy + "/" + cost + ".");
             return;
         }
         currentEnergy -= cost;
         addMessage(name + " cast Fan of Knives.");
         List<Enemy> closeEnemies = getEnemiesInRange(enemies, 2);
-        if (closeEnemies.isEmpty()) {
-            addMessage(name + " cast special ability but no enemies in range.");
-        }
         for (Enemy enemy : closeEnemies) {
             int defRoll = rand.nextInt(enemy.defencePoint + 1);
             int damage = Math.max(0, attackPoint - defRoll);

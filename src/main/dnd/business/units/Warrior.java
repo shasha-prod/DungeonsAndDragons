@@ -27,9 +27,10 @@ public class Warrior extends Player {
             attackPoint  += 2 * playerLevel;
             defencePoint += playerLevel;
             healthAmount  = healthPool;
-            addMessage("                +" + (5 * playerLevel) + " bonus health, +"
-                    + (2 * playerLevel) + " bonus attack, +"
-                    + playerLevel       + " bonus defense");
+            addMessage(name + " reached level " + playerLevel + ": +"
+                    + (15 * playerLevel) + " Health, +"
+                    + (6  * playerLevel) + " Attack, +"
+                    + (2  * playerLevel) + " Defense");
         }
         return level;
     }

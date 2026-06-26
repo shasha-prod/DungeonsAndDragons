@@ -259,8 +259,8 @@ public class MessageFormatTest {
         List<String> msgs = player.drainMessages();
 
         boolean hasDeath = msgs.stream().anyMatch(m ->
-            m.equals("Gold Cloak died. Jon Snow gained 25 XP"));
-        assertTrue(hasDeath, "Should contain exact death/XP message. Got: " + msgs);
+            m.equals("Gold Cloak died. Jon Snow gained 25 experience"));
+        assertTrue(hasDeath, "Should contain exact death/experience message. Got: " + msgs);
     }
 
     // ===================================================================
@@ -273,15 +273,11 @@ public class MessageFormatTest {
         w.addExperience(50); // level up to 2
         List<String> msgs = w.drainMessages();
 
-        // Base line from Player.addExperience
+        // Warrior shows ONE combined line: base + warrior bonus stats
+        // HP: 10*2 + 5*2 = 30, ATK: 4*2 + 2*2 = 12, DEF: 1*2 + 1*2 = 4
         boolean hasBase = msgs.stream().anyMatch(m ->
-            m.equals("Jon Snow reached level 2: +20 Health, +8 Attack, +2 Defense"));
+            m.equals("Jon Snow reached level 2: +30 Health, +12 Attack, +4 Defense"));
         assertTrue(hasBase, "Base level-up line must be exact. Got: " + msgs);
-
-        // Warrior class-specific line (16 spaces indent)
-        boolean hasBonus = msgs.stream().anyMatch(m ->
-            m.equals("                +10 bonus health, +4 bonus attack, +2 bonus defense"));
-        assertTrue(hasBonus, "Warrior bonus line must have 16-space indent. Got: " + msgs);
     }
 
     @Test
@@ -305,13 +301,10 @@ public class MessageFormatTest {
         r.addExperience(50);
         List<String> msgs = r.drainMessages();
 
+        // Rogue shows ONE combined line: HP base, ATK combined (4*2 + 3*2 = 14), DEF base
         boolean hasBase = msgs.stream().anyMatch(msg ->
-            msg.equals("Arya Stark reached level 2: +20 Health, +8 Attack, +2 Defense"));
+            msg.equals("Arya Stark reached level 2: +20 Health, +14 Attack, +2 Defense"));
         assertTrue(hasBase, "Base level-up line. Got: " + msgs);
-
-        boolean hasBonus = msgs.stream().anyMatch(msg ->
-            msg.equals("                +6 bonus attack, energy restored"));
-        assertTrue(hasBonus, "Rogue bonus line (3*2=6 atk). Got: " + msgs);
     }
 
     @Test
@@ -320,23 +313,21 @@ public class MessageFormatTest {
         h.addExperience(50);
         List<String> msgs = h.drainMessages();
 
+        // Hunter shows ONE combined line.
+        // HP: 10*2=20, ATK: (4+2)*2=12, DEF: 2(base) + 2(playerLevel) = 4
         boolean hasBase = msgs.stream().anyMatch(msg ->
-            msg.equals("Ygritte reached level 2: +20 Health, +8 Attack, +2 Defense"));
+            msg.equals("Ygritte reached level 2: +20 Health, +12 Attack, +4 Defense"));
         assertTrue(hasBase, "Base level-up line. Got: " + msgs);
-
-        boolean hasBonus = msgs.stream().anyMatch(msg ->
-            msg.equals("                +20 bonus arrows, +4 bonus attack, +2 bonus defense"));
-        assertTrue(hasBonus, "Hunter bonus line (10*2=20 arrows, 2*2=4 atk, 1*2=2 def). Got: " + msgs);
     }
 
     @Test
     public void testLevelUpMessageCountIsTwo() {
-        // One level up should produce exactly 2 messages (base + class-specific)
-        Warrior w = new Warrior("Jon Snow", 300, 30, 4, 3);
-        w.addExperience(50);
-        List<String> msgs = w.drainMessages();
+        // Mage level-up produces exactly 2 messages (base + mana/spell line)
+        Mage m = new Mage("Melisandre", 100, 5, 1, 300, 30, 15, 5, 6);
+        m.addExperience(50);
+        List<String> msgs = m.drainMessages();
         assertEquals(2, msgs.size(),
-            "One level-up should produce exactly 2 messages. Got: " + msgs);
+            "Mage one level-up should produce exactly 2 messages. Got: " + msgs);
     }
 
     // ===================================================================
@@ -431,10 +422,8 @@ public class MessageFormatTest {
         List<String> msgs = m.drainMessages();
 
         assertEquals(1, msgs.size(), "Only one message when blocked by mana");
-        assertTrue(msgs.get(0).contains("Cannot cast ability"),
-            "Should say 'Cannot cast ability'. Got: " + msgs.get(0));
-        assertTrue(msgs.get(0).contains("30"),  "Should mention cost 30");
-        assertTrue(msgs.get(0).contains("15"),  "Should mention current mana 15");
+        assertEquals("Melisandre tried to cast Blizzard, but there was not enough mana: 15/30.",
+            msgs.get(0), "Exact not-enough-mana message");
     }
 
     @Test
@@ -454,7 +443,7 @@ public class MessageFormatTest {
         h.castAbility(enemies);
         List<String> msgs = h.drainMessages();
         assertEquals(1, msgs.size(), "Only one message when no arrows");
-        assertEquals("Ygritte has no arrows.", msgs.get(0));
+        assertEquals("Ygritte tried to shoot an arrow but has no arrows.", msgs.get(0));
     }
 
     // ===================================================================
