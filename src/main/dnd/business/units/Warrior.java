@@ -3,12 +3,10 @@ import dnd.business.board.Position;
 import dnd.business.visitors.OccupantVisitor;
 
 import java.util.List;
-import java.util.Random;
 
 public class Warrior extends Player {
     private int abilityCooldown;
     private int remainingCooldown;
-    private Random random = new Random();
 
     public Warrior(String name, int healthPool, int attackPoint, int defencePoint, int abilityCooldown, Position pos) {
         super(name, healthPool, attackPoint, defencePoint, pos);
@@ -28,13 +26,12 @@ public class Warrior extends Player {
             healthPool   += 5 * playerLevel;
             attackPoint  += 2 * playerLevel;
             defencePoint += playerLevel;
-            healthAmount  = healthPool;   // re-apply full-heal after warrior bonus HP is added
+            healthAmount  = healthPool;
             addMessage("                +" + (5 * playerLevel) + " bonus health, +"
                     + (2 * playerLevel) + " bonus attack, +"
                     + playerLevel       + " bonus defense");
-            return true;
         }
-        return false;
+        return level;
     }
 
     @Override

@@ -2,10 +2,6 @@ package dnd.business.factory;
 
 import dnd.business.board.Position;
 import dnd.business.units.*;
-import dnd.cli.CLIHandler;
-
-import java.util.Dictionary;
-import java.util.Hashtable;
 
 public class UnitFactory {
 

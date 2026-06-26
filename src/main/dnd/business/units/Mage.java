@@ -5,7 +5,6 @@ import dnd.business.visitors.OccupantVisitor;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 public class Mage extends Player {
     private int manaPool;
@@ -14,7 +13,6 @@ public class Mage extends Player {
     private int spellPower;
     private int hitsCount;
     private int abilityRange;
-    private Random random = new Random();
 
     public Mage(String name, int healthPool, int attackPoint, int defencePoint, int manaPool, int manaCost,
                 int spellPower, int hitsCount, int abilityRange, Position pos) {
@@ -47,9 +45,8 @@ public class Mage extends Player {
             spellPower = spellPower + (10 * playerLevel);
             addMessage("                +" + (25 * playerLevel) + " maximum mana, +"
                     + (10 * playerLevel) + " spell power");
-            return true;
         }
-        return false;
+        return level;
     }
 
     @Override
@@ -65,7 +62,7 @@ public class Mage extends Player {
             List<Enemy> inRange = getEnemiesInRange(enemyList, abilityRange);
             if (inRange.isEmpty()) break;
             Enemy target = chooseRandomEnemy(inRange);
-            int defRoll = random.nextInt(target.defencePoint + 1);
+            int defRoll = rand.nextInt(target.defencePoint + 1);
             int damage = Math.max(0, spellPower - defRoll);
             target.takeDamage(damage);
 
@@ -82,7 +79,7 @@ public class Mage extends Player {
 
     @Override
     public void onGameTick() {
-        currentMana = Math.min(manaPool, currentMana + 1 * playerLevel);
+        currentMana = Math.min(manaPool, currentMana + playerLevel);
     }
 
     public String description() {
@@ -96,15 +93,7 @@ public class Mage extends Player {
     }
 
     //For testing
-    public int getCurrentMana() {
-        return currentMana;
-    }
-
-    public int getSpellPower() {
-        return spellPower;
-    }
-
-    public int getManaPool() {
-        return manaPool;
-    }
+    public int getCurrentMana() { return currentMana; }
+    public int getSpellPower()  { return spellPower; }
+    public int getManaPool()    { return manaPool; }
 }

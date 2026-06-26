@@ -47,17 +47,6 @@ public class Monster extends Enemy {
     // Movement helpers
     // -----------------------------------------------------------------------
 
-    /** Returns the cardinal neighbour one step closer to the target. */
-    private Position stepToward(Position target) {
-        int dx = target.getX() - position.getX();
-        int dy = target.getY() - position.getY();
-        if (Math.abs(dx) >= Math.abs(dy)) {
-            return new Position(position.getX() + Integer.signum(dx), position.getY());
-        } else {
-            return new Position(position.getX(), position.getY() + Integer.signum(dy));
-        }
-    }
-
     /** Random cardinal step; case 4 = stay put (returns null). */
     private Position randomStep() {
         switch (RANDOM.nextInt(5)) {

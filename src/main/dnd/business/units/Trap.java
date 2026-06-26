@@ -20,7 +20,6 @@ public class Trap extends Enemy {
     private int visibilityTime;
     private int ticksCount;
     private boolean visible;
-    private char tile;
 
     /**
      * @param experienceValue  XP awarded when the trap is destroyed
@@ -38,7 +37,6 @@ public class Trap extends Enemy {
         this.invisibilityTime = invisibilityTime;
         this.ticksCount       = 0;
         this.visible          = true;
-        this.tile             = tile;
     }
 
     // -----------------------------------------------------------------------

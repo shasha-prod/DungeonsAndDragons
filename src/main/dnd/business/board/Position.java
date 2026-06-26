@@ -13,23 +13,8 @@ public class Position {
     public int getX() { return x; }
     public int getY() { return y; }
 
-//    public void setPosition(int x, int y) {
-//        this.x = x;
-//        this.y = y;
-//    }
-
-    //
     public double getCoordinates(Position other) {
         return Math.sqrt(Math.pow(this.x - other.x, 2) + Math.pow(this.y - other.y, 2));
-    }
-
-    //UNUSED?
-    // Recieves a Position and compares it to this Position.
-    public int compareTo(Position other) {
-        if (this.y != other.y) {
-            return Integer.compare(this.y, other.y);
-        }
-        return Integer.compare(this.x, other.x);
     }
 
 }

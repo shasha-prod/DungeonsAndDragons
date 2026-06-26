@@ -1,6 +1,5 @@
 package dnd.business.units;
 
-import dnd.business.GameObserver;
 import dnd.business.board.*;
 import dnd.business.visitors.CellVisitor;
 import dnd.business.visitors.OccupantVisitor;
@@ -18,7 +17,6 @@ public abstract class Unit implements Occupant, CellVisitor, OccupantVisitor {
     protected Position position;
     protected Position targetPosition = null;
     protected GameBoard board;
-    protected List<GameObserver> observers = new ArrayList<>();
     private List<String> messages = new ArrayList<>();
     private static final Random RANDOM = new Random();
 
@@ -105,12 +103,7 @@ public abstract class Unit implements Occupant, CellVisitor, OccupantVisitor {
     // Combat
     // -----------------------------------------------------------------------
 
-    /**
-     * Roll-based attack: damage = max(0, attackRoll - defenseRoll).
-     * Notifies all observers and announces death if the target dies.
-     *
-     * @return
-     */
+    /** Roll-based attack: damage = max(0, attackRoll - defenseRoll). */
     public String attack(Unit target) {
         int attackRoll  = RANDOM.nextInt(attackPoint) + 1;
         int defenseRoll = RANDOM.nextInt(Math.max(target.defencePoint, 1)) + 1;
@@ -127,12 +120,8 @@ public abstract class Unit implements Occupant, CellVisitor, OccupantVisitor {
         healthAmount = Math.max(0, healthAmount - amount);
     }
     // -----------------------------------------------------------------------
-    // Observers / messaging
+    // Messaging
     // -----------------------------------------------------------------------
-
-    public void addObserver(GameObserver observer) {
-        observers.add(observer);
-    }
 
     protected void addMessage(String msg) {
         messages.add(msg);
@@ -151,8 +140,8 @@ public abstract class Unit implements Occupant, CellVisitor, OccupantVisitor {
     public String getName()       { return name; }
     public Position getPosition() { return position; }
     public void setPosition(Position p) { this.position = p; }
-    public boolean isDead()       { return healthAmount <= 0; }
-    public boolean isAlive()       { return healthAmount > 0; }
+    public boolean isDead()  { return healthAmount <= 0; }
+    public boolean isAlive() { return !isDead(); }
     public int getHealthAmount() {return healthAmount;}
 
     //For testing

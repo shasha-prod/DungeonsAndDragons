@@ -38,7 +38,7 @@ public class Boss extends Enemy {
         if (position == null || player.getPosition() == null) return;
 
         combatTicks++;
-        double dist = this.position.getCoordinates(player.getPosition());
+        int dist = Range.range(this.position, player.getPosition());
 
         // Special ability fires every abilityFrequency ticks
         if (combatTicks % abilityFrequency == 0) {
@@ -65,20 +65,6 @@ public class Boss extends Enemy {
         addMessage(name + " shoots " + player.getName() + " for " + rawDamage + " damage");
         if (player.isDead()) {
             addMessage(player.getName() + " was killed by " + name + ".");
-        }
-    }
-
-    // -----------------------------------------------------------------------
-    // Movement helper
-    // -----------------------------------------------------------------------
-
-    private Position stepToward(Position target) {
-        int dx = target.getX() - position.getX();
-        int dy = target.getY() - position.getY();
-        if (Math.abs(dx) >= Math.abs(dy)) {
-            return new Position(position.getX() + Integer.signum(dx), position.getY());
-        } else {
-            return new Position(position.getX(), position.getY() + Integer.signum(dy));
         }
     }
 

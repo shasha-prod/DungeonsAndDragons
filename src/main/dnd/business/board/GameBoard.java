@@ -30,15 +30,6 @@ public class GameBoard {
         }
     }
 
-    //UNUSED?
-    //Recieves a position of a Cell in a GameBoard and returns the Occupant currently on the Position.
-    public Occupant getOccupant(Position p) {
-        Cell cell = getCell(p);
-        OccupantExtractor extractor = new OccupantExtractor();
-        cell.accept(extractor);
-        return extractor.getOccupant();
-    }
-
     //Recieves a position of a Cell in a GameBoard and a new Occupant to place on the cell and sets the Occupant on the Cell.
     public void setOccupant(Position p, Occupant o) {
         Cell cell = getCell(p);

@@ -1,8 +1,5 @@
 package dnd.cli;
 import dnd.business.GameObserver;
-import dnd.business.board.GameBoard;
-import dnd.business.units.Player;
-import dnd.business.units.Unit;
 
 import java.util.Scanner;
 

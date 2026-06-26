@@ -33,9 +33,6 @@ public abstract class Player extends Unit implements HeroicUnit {
         }
         return false;
     }
-    public void accept(Unit unit){
-        unit.visit(this);
-    }
     @Override
     public void accept(OccupantVisitor visitor) {
         visitor.visit(this);  // 'this' is Player → calls visit(Player)
@@ -66,7 +63,7 @@ public abstract class Player extends Unit implements HeroicUnit {
     public abstract void onGameTick() ;
 
     public int getPlayerLevel() {
-        return this.playerLevel; // Assuming your level variable is named playerLevel
+        return playerLevel;
     }
 
     @Override
@@ -97,10 +94,6 @@ public abstract class Player extends Unit implements HeroicUnit {
     public int getHealthPool()   { return healthPool; }
     public int getExperience()   { return experience; }
 
-    /**
-     * Grant XP and immediately resolve any resulting level-ups.
-     * Observer notifications fire for each level gained.
-     */
     public void addExperience(int xp) {
         experience += xp;
         while (levelUp()) {

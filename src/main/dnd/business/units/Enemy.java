@@ -59,6 +59,17 @@ public abstract class Enemy extends Unit {
 
     public int getExperienceValue() { return experienceValue; }
 
-    public String toString() { return "" +tile; }
+    /** Returns the cardinal neighbour one step closer to the target. */
+    protected Position stepToward(Position target) {
+        int dx = target.getX() - position.getX();
+        int dy = target.getY() - position.getY();
+        if (Math.abs(dx) >= Math.abs(dy)) {
+            return new Position(position.getX() + Integer.signum(dx), position.getY());
+        } else {
+            return new Position(position.getX(), position.getY() + Integer.signum(dy));
+        }
+    }
+
+    public String toString() { return "" + tile; }
 
 }
